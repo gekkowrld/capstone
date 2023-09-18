@@ -1,11 +1,11 @@
-import React from 'react'
+// How to set up React with Firebase/Firestore v9 (Part 3 | setDoc)
+// https://youtu.be/TNTMTJrxIY0
 
-const Home = () => {
-  return (
-	<div>
-	  Home
-	</div>
-  )
+import Add from "./Add";
+
+
+export default function Home() {
+    return(
+        <Add />
+    )
 }
-
-export default Home
