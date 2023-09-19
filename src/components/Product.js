@@ -2,6 +2,7 @@ import db from "../firebase/sdk";
 import { collection, getDocs } from "firebase/firestore";
 import { useState, useEffect } from "react";
 import LoadingScreen from "../components/Loading";
+import DynamicMeta from "./DynamicMeta";
 
 const Products = () => {
 	const [products, setProducts] = useState([]);
@@ -22,7 +23,8 @@ const Products = () => {
 	if (loading) {
 		return <LoadingScreen />;
 	}
-
+	let my = "Products";
+	let ths = "This is the products page";
 	return (
 		<div>
 			{products.map(product => (
@@ -30,6 +32,7 @@ const Products = () => {
 					<h1>{product.name}</h1>
 					<h2>{product.price}</h2>
 					<p>{product.description}</p>
+					<DynamicMeta title={my} description={ths} />
 				</div>
 			))}
 		</div>

@@ -1,8 +1,5 @@
-// How to set up React with Firebase/Firestore v9 (Part 3 | setDoc)
-// https://youtu.be/TNTMTJrxIY0
-
-import Add from "./Add";
+import Products from "./Product";
 
 export default function Home() {
-	return <Add />;
+	return <Products />;
 }

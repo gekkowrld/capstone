@@ -5,6 +5,7 @@ import Header from "./components/Header";
 import Home from "./components/Home";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Products from "./components/Product";
+import Providers from "./auth/Providers";
 
 function App() {
 	return (
@@ -13,6 +14,7 @@ function App() {
 			<Routes>
 				<Route path="/" element={<Home />} />
 				<Route path="/products" element={<Products />} />
+				<Route path="/signin" element={<Providers />} />
 				<Route path="*" element={<PageNotFound />} />
 			</Routes>
 			<Footer />
