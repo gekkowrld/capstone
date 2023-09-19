@@ -3,9 +3,6 @@
 
 import Add from "./Add";
 
-
 export default function Home() {
-    return(
-        <Add />
-    )
+	return <Add />;
 }
