@@ -22,8 +22,6 @@ const Products = () => {
 	if (loading) {
 		return <LoadingScreen />;
 	}
-	let my = "Products";
-	let ths = "This is the products page";
 	return (
 		<div>
 			{products.map(product => (
