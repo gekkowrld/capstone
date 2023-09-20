@@ -1,5 +1,5 @@
-import {collection, getDocs} from "firebase/firestore";
-import {useEffect, useState} from "react";
+import { collection, getDocs } from "firebase/firestore";
+import { useEffect, useState } from "react";
 
 import LoadingScreen from "../components/Loading";
 import db from "../firebase/sdk";
