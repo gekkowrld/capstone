@@ -1,7 +1,8 @@
-import db from '../firebase/sdk';
+import db from "../firebase/sdk";
 import { collection, getDocs } from "firebase/firestore";
-import React, { useState, useEffect } from 'react';
-import LoadingScreen from '../components/Loading';
+import { useState, useEffect } from "react";
+import LoadingScreen from "../components/Loading";
+import DynamicMeta from "./DynamicMeta";
 
 const Products = () => {
 	const [products, setProducts] = useState([]);
@@ -10,30 +11,32 @@ const Products = () => {
 	const getProducts = async () => {
 		setLoading(true);
 		const querySnapshot = await getDocs(collection(db, "products"));
-		const products = querySnapshot.docs.map((doc) => doc.data());
+		const products = querySnapshot.docs.map(doc => doc.data());
 		setProducts(products);
 		setLoading(false);
-	}
+	};
 
 	useEffect(() => {
 		getProducts();
 	}, []);
 
 	if (loading) {
-		return <LoadingScreen />
+		return <LoadingScreen />;
 	}
-
+	let my = "Products";
+	let ths = "This is the products page";
 	return (
 		<div>
-			{products.map((product) => (
+			{products.map(product => (
 				<div key={product.id}>
 					<h1>{product.name}</h1>
 					<h2>{product.price}</h2>
-                    <p>{product.description}</p>
+					<p>{product.description}</p>
+					<DynamicMeta title={my} description={ths} />
 				</div>
 			))}
 		</div>
-	)
-}
+	);
+};
 
 export default Products;
