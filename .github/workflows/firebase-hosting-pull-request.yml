@@ -15,7 +15,7 @@ jobs:
                   npm pkg set scripts.prepare="husky install"
                   npm run prepare
                   npx husky add .husky/pre-commit "npm test"
-                  npm install --package-lock-only && npm ci && npm run b
+                  npm install --package-lock-only && npm ci && npm run build
             - uses: FirebaseExtended/action-hosting-deploy@v0
               with:
                   repoToken: "${{ secrets.GITHUB_TOKEN }}"
