@@ -9,7 +9,8 @@ jobs:
         runs-on: ubuntu-latest
         steps:
             - uses: actions/checkout@v3
-            - run: npm install husky --save-dev
+            - run: | 
+                  npm install husky --save-dev
                   npm install lint-staged --save-dev
                   npm pkg set scripts.prepare="husky install"
                   npm run prepare
