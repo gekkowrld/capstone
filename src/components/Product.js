@@ -1,7 +1,8 @@
-import db from "../firebase/sdk";
 import { collection, getDocs } from "firebase/firestore";
-import { useState, useEffect } from "react";
+import { useEffect, useState } from "react";
+
 import LoadingScreen from "../components/Loading";
+import db from "../firebase/sdk";
 
 const Products = () => {
 	const [products, setProducts] = useState([]);
@@ -22,8 +23,6 @@ const Products = () => {
 	if (loading) {
 		return <LoadingScreen />;
 	}
-	let my = "Products";
-	let ths = "This is the products page";
 	return (
 		<div>
 			{products.map(product => (

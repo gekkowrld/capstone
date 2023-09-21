@@ -38,9 +38,11 @@ export const signInWithGoogle = () => {
 		.then(result => {
 			let photo = result.user.photoURL;
 			let name = result.user.displayName;
+			let email = result.user.email;
 
 			localStorage.setItem("photo", photo);
-			localStorage.setItem("name", name.replace(/\s/g, ""));
+			localStorage.setItem("name", name);
+			localStorage.setItem("email", email);
 		})
 		.catch(error => {
 			console.error(error.message);
@@ -53,22 +55,29 @@ export const signInWithTwitter = () => {
 	signInWithPopup(auth, twitter_provider)
 		.then(result => {
 			let photo = result.user.photoURL;
+			let name = result.user.displayName;
+			let email = result.user.email;
 
+			localStorage.setItem("email", email);
 			localStorage.setItem("photo", photo);
+			localStorage.setItem("name", name);
 		})
 		.catch(error => {
 			console.error(error.message);
 		});
 };
 
-export async function logout() {
-	try {
-		await signOut(auth);
-		localStorage.clear();
-	} catch {
-		console.log("error");
-	}
-}
+export const logout = () => {
+	signOut(auth)
+		.then(() => {
+			localStorage.removeItem("email");
+			localStorage.removeItem("photo");
+			localStorage.removeItem("name");
+		})
+		.catch(error => {
+			console.error(error.message);
+		});
+};
 
 export const isLoggedIn = () => {
 	const [loggedIn, setLoggedIn] = useState(false);
