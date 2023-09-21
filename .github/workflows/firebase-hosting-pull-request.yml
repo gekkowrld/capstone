@@ -14,9 +14,9 @@ jobs:
                   npm install lint-staged --save-dev
                   npm pkg set scripts.prepare="husky install"
                   npm run prepare
-                  npx husky add .husky/pre-commit "npm test" |
-                  npm install --package-lock-only && npm ci && npm run build
-            - uses: FirebaseExtended/action-hosting-deploy@main
+                  npx husky add .husky/pre-commit "npm test"
+                  npm install --package-lock-only && npm ci && npm run b
+            - uses: FirebaseExtended/action-hosting-deploy@v0
               with:
                   repoToken: "${{ secrets.GITHUB_TOKEN }}"
                   firebaseServiceAccount: "${{ secrets.FIREBASE_SERVICE_ACCOUNT_CAPSTONE_B4B64 }}"
