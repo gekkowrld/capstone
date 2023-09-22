@@ -6,11 +6,11 @@ import {
 	getAuth,
 	GoogleAuthProvider,
 	signInWithPopup,
-	signOut,
 	onAuthStateChanged,
 	TwitterAuthProvider
 } from "firebase/auth";
 import { useEffect, useState } from "react";
+import { getStorage, ref, getDownloadURL } from "firebase/storage";
 
 // https://firebase.google.com/docs/web/setup#available-libraries
 
@@ -28,6 +28,7 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 export const auth = getAuth(app);
 const analytics = getAnalytics(app);
+const storage = getStorage();
 
 export default getFirestore();
 
@@ -67,17 +68,10 @@ export const signInWithTwitter = () => {
 		});
 };
 
-export const logout = () => {
-	signOut(auth)
-		.then(() => {
-			localStorage.removeItem("email");
-			localStorage.removeItem("photo");
-			localStorage.removeItem("name");
-		})
-		.catch(error => {
-			console.error(error.message);
-		});
-};
+/* This is now a prototype rather than a working version
+ * This is to reduce latency when signing in
+ *
+ */
 
 export const isLoggedIn = () => {
 	const [loggedIn, setLoggedIn] = useState(false);
@@ -86,11 +80,21 @@ export const isLoggedIn = () => {
 		onAuthStateChanged(auth, user => {
 			if (user) {
 				setLoggedIn(true);
+				console.log("User is logged in (authStateChanged)");
 			} else {
 				setLoggedIn(false);
+				console.log("User is not logged in (authStateChanged)");
 			}
 		});
 	}, []);
 
 	return loggedIn;
 };
+
+export async function getImageUrl(imagePath) {
+	const imageRef = ref(storage, imagePath);
+	const imageUrl = await getDownloadURL(imageRef).catch(error => {
+		console.log(error);
+	});
+	return imageUrl;
+}
