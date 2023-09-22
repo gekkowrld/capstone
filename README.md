@@ -6,7 +6,11 @@
 
 A user can now login and logout using Google OAuth. The user can also login using Twitter OAuth.
 
--   [x] Authenticate user using Google OAuth
--   [ ] Authenticate user using Facebook OAuth
--   [x] Authenticate user using Twitter OAuth
--   [x] Logout user
+- [x] Authenticate user using Google OAuth
+- [ ] Authenticate user using Facebook OAuth
+- [x] Authenticate user using Twitter OAuth
+- [x] Logout user
+
+### 2. User Profile
+
+A user can now login and out by clicking their profile.
