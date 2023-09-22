@@ -1,4 +1,4 @@
-import { Fragment } from "react";
+import { Fragment, useEffect, useState } from "react";
 import { Disclosure, Menu, Transition } from "@headlessui/react";
 import {
 	Bars3Icon,
@@ -8,7 +8,7 @@ import {
 import { logo } from "../assets/img";
 import { v4 as uuidv4 } from "uuid";
 import { projectName } from "./subcomponents/constValues";
-import { isLoggedIn } from "../firebase/sdk";
+import { auth } from "../firebase/sdk";
 
 // This value is bound to change
 let picsumSeed = uuidv4().replace(/[^a-zA-Z ]/g, "");
@@ -16,53 +16,50 @@ let picsumSeed = uuidv4().replace(/[^a-zA-Z ]/g, "");
 // Convert it to a string without any 'special' characters
 let placeholderImageUrl = `https://picsum.photos/seed/${picsumSeed}/200/`;
 
-let signedText = " ";
-let loggedInName = " ";
-let loggedInEmail = " ";
-let loggedInLoginPath = " ";
-
-if (
-	isLoggedIn &&
-	(localStorage.getItem("photo") ||
-		localStorage.getItem("name") ||
-		localStorage.getItem("email"))
-) {
-	signedText = "Sign out";
-	loggedInName = localStorage.getItem("name");
-	placeholderImageUrl = localStorage.getItem("photo");
-	loggedInEmail = localStorage.getItem("email");
-	loggedInLoginPath = "/logout";
-} else {
-	signedText = "Sign in";
-	loggedInLoginPath = "/login";
-}
-
-const user = {
-	name: loggedInName,
-	email: loggedInEmail,
-	imageUrl: placeholderImageUrl
-};
-const navigation = [{ name: "Products", href: "/products", current: true }];
-const userNavigation = [
-	{ name: "Your Profile", href: "/dashboard" },
-	{ name: signedText, href: loggedInLoginPath }
-];
-
-function classNames(...classes) {
-	return classes.filter(Boolean).join(" ");
-}
-
 export default function Header() {
+	const [signedText, setSignedText] = useState(" ");
+	const [loggedInName, setLoggedInName] = useState(" ");
+	const [loggedInEmail, setLoggedInEmail] = useState(" ");
+	const [loggedInLoginPath, setLoggedInLoginPath] = useState(" ");
+	const [loggedInPhoto, setLoggedInPhoto] = useState(placeholderImageUrl);
+
+	useEffect(() => {
+		const unsubscribe = auth.onAuthStateChanged(user => {
+			if (user == null) {
+				setSignedText("Sign In");
+				setLoggedInName(" ");
+				setLoggedInEmail(" ");
+				setLoggedInLoginPath("/login");
+			} else {
+				setSignedText("Sign Out");
+				setLoggedInName(user.displayName);
+				setLoggedInEmail(user.email);
+				setLoggedInLoginPath("/logout");
+				setLoggedInPhoto(user.photoURL);
+			}
+		});
+
+		return () => {
+			unsubscribe();
+		};
+	}, []);
+
+	const user = {
+		name: loggedInName,
+		email: loggedInEmail,
+		imageUrl: loggedInPhoto
+	};
+	const navigation = [{ name: "Products", href: "/products", current: true }];
+	const userNavigation = [
+		{ name: "Your Profile", href: "/dashboard" },
+		{ name: signedText, href: loggedInLoginPath }
+	];
+
+	function classNames(...classes) {
+		return classes.filter(Boolean).join(" ");
+	}
 	return (
 		<>
-			{/*
-        This example requires updating your template:
-
-        ```
-        <html class="h-full bg-gray-100">
-        <body class="h-full">
-        ```
-      */}
 			<div className="min-h-full">
 				<Disclosure as="nav" className="bg-gray-800">
 					{({ open }) => (

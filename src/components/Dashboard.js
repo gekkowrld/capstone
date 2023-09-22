@@ -1,9 +1,30 @@
+import { useEffect, useState } from "react";
+import { LoginDashboard, MemberDashboard } from "./subcomponents/dLog";
+import DynamicMeta from "./DynamicMeta";
+import { auth } from "../firebase/sdk";
+
 const Dashboard = () => {
-	let username = localStorage.getItem("name");
+	const [isLoggedIn, setIsLoggedIn] = useState(false);
+
+	useEffect(() => {
+		const unsubscribe = auth.onAuthStateChanged(user => {
+			if (user) {
+				setIsLoggedIn(true);
+			} else {
+				setIsLoggedIn(false);
+			}
+		});
+
+		return () => {
+			unsubscribe();
+		};
+	}, []);
+
 	return (
-		<div>
-			<h1>{username}</h1>
-		</div>
+		<>
+			<DynamicMeta title="Dashboard" />
+			{isLoggedIn ? <MemberDashboard /> : <LoginDashboard />}
+		</>
 	);
 };
 
