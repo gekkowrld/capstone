@@ -38,7 +38,12 @@ function Search() {
 
 	return (
 		<div>
-			<input type="text" value={searchTerm} onChange={handleSearch} />
+			<input
+				type="text"
+				value={searchTerm}
+				onChange={handleSearch}
+				aria-label="Search products"
+			/>
 			{showResults && (
 				<ul>
 					{filteredProducts.map(product => (
@@ -53,6 +58,7 @@ function Search() {
 			<button
 				onClick={handleButtonClick}
 				className="text-red-600 w-32 h-36"
+				aria-label="Clear search results"
 			>
 				<SearchSharp />
 			</button>
