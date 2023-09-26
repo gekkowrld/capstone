@@ -1,42 +1,44 @@
-import {SearchSharp} from "@mui/icons-material";
-import {collection, getFirestore, onSnapshot} from "firebase/firestore";
-import {useEffect, useState} from "react";
+import { SearchSharp } from "@mui/icons-material";
+import { collection, getFirestore, onSnapshot } from "firebase/firestore";
+import { useEffect, useState } from "react";
 
 function Search() {
-  const [searchTerm, setSearchTerm] = useState("");
-  const [productsData, setProductsData] = useState([]);
-  const [showResults, setShowResults] = useState(false);
+	const [searchTerm, setSearchTerm] = useState("");
+	const [productsData, setProductsData] = useState([]);
+	const [showResults, setShowResults] = useState(false);
 
-  useEffect(() => {
-    const db = getFirestore();
-    const productsRef = collection(db, "products");
+	useEffect(() => {
+		const db = getFirestore();
+		const productsRef = collection(db, "products");
 
-    const unsubscribe = onSnapshot(productsRef, snapshot => {
-      const data = [];
-      snapshot.forEach(doc => {
-        const {name, id} = {...doc.data(), id : doc.id};
-        data.push({name, id});
-      });
-      setProductsData(data);
-    });
+		const unsubscribe = onSnapshot(productsRef, snapshot => {
+			const data = [];
+			snapshot.forEach(doc => {
+				const { name, id } = { ...doc.data(), id: doc.id };
+				data.push({ name, id });
+			});
+			setProductsData(data);
+		});
 
-    return () => unsubscribe();
-  }, []);
+		return () => unsubscribe();
+	}, []);
 
-  const handleSearch = event => {
-    setSearchTerm(event.target.value);
-    setShowResults(true);
-  };
+	const handleSearch = event => {
+		setSearchTerm(event.target.value);
+		setShowResults(true);
+	};
 
-  const handleButtonClick = () => { setShowResults(false); };
+	const handleButtonClick = () => {
+		setShowResults(false);
+	};
 
-  const filteredProducts = productsData.filter(
-      product => product.name.toLowerCase().includes(searchTerm.toLowerCase()));
+	const filteredProducts = productsData.filter(product =>
+		product.name.toLowerCase().includes(searchTerm.toLowerCase())
+	);
 
-        return (
+	return (
 		<div>
-			<input type="text" value={searchTerm} onChange={
-    handleSearch} />
+			<input type="text" value={searchTerm} onChange={handleSearch} />
 			{showResults && (
 				<ul>
 					{filteredProducts.map(product => (
@@ -45,9 +47,8 @@ function Search() {
 								{product.name}
 							</a>
 						</li>
-					))
-}
-                                </ul>
+					))}
+				</ul>
 			)}
 			<button
 				onClick={handleButtonClick}
@@ -57,6 +58,6 @@ function Search() {
 			</button>
 		</div>
 	);
-                                }
+}
 
-                                export default Search;
+export default Search;
