@@ -1,11 +1,12 @@
-import { useState, useEffect } from "react";
-import { useParams } from "react-router-dom";
-import { collection, doc, getDoc } from "firebase/firestore";
-import { getStorage, ref, getDownloadURL } from "firebase/storage";
+import {Card} from "@material-tailwind/react";
+import {collection, doc, getDoc} from "firebase/firestore";
+import {getDownloadURL, getStorage, ref} from "firebase/storage";
+import {useEffect, useState} from "react";
+import {useParams} from "react-router-dom";
+
 import db from "../../firebase/sdk";
-import LoadingScreen from "../Loading";
-import { Card } from "@material-tailwind/react";
 import DynamicMeta from "../DynamicMeta";
+import LoadingScreen from "../Loading";
 
 const RenderProductDescription = () => {
 	const { uid } = useParams();
