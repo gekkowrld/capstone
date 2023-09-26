@@ -2,14 +2,15 @@ import "./App.css";
 
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 
+import LogoutPath from "./auth/logout";
 import Providers from "./auth/Providers";
 import PageNotFound from "./components/404";
-import { Footer } from "./components/Footer";
+import Dashboard from "./components/Dashboard";
+import Header from "./components/Header";
 import Home from "./components/Home";
 import Products from "./components/Product";
-import Header from "./components/Header";
-import LogoutPath from "./auth/logout";
-import Dashboard from "./components/Dashboard";
+import Search from "./components/Search";
+import RenderProductDescription from "./components/subcomponents/productPage";
 
 function App() {
 	return (
@@ -21,9 +22,13 @@ function App() {
 				<Route path="/dashboard" element={<Dashboard />} />
 				<Route path="/login" element={<Providers />} />
 				<Route path="/logout" element={<LogoutPath />} />
+				<Route
+					path="product/:uid"
+					element={<RenderProductDescription />}
+				/>
 				<Route path="*" element={<PageNotFound />} />
 			</Routes>{" "}
-			<Footer />
+			<Search />
 		</Router>
 	);
 }
