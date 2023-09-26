@@ -1,11 +1,13 @@
-import { useEffect, useState } from "react";
-import db from "../firebase/sdk";
-import { onSnapshot, collection } from "firebase/firestore";
 import { Card } from "@material-tailwind/react";
+import { collection, onSnapshot } from "firebase/firestore";
+import { getDownloadURL, getStorage, ref } from "firebase/storage";
+import { useEffect, useState } from "react";
+
 import LoadingScreen from "../components/Loading";
-import { getStorage, getDownloadURL, ref } from "firebase/storage";
-import RenderProductDescription from "./subcomponents/productPage";
+import db from "../firebase/sdk";
+
 import DynamicMeta from "./DynamicMeta";
+import RenderProductDescription from "./subcomponents/productPage";
 
 export default function Products() {
 	const [products, setProducts] = useState([]);
