@@ -2,15 +2,15 @@ import "./App.css";
 
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 
+import LogoutPath from "./auth/logout";
 import Providers from "./auth/Providers";
 import PageNotFound from "./components/404";
+import Dashboard from "./components/Dashboard";
+import Header from "./components/Header";
 import Home from "./components/Home";
 import Products from "./components/Product";
-import Header from "./components/Header";
-import LogoutPath from "./auth/logout";
-import Dashboard from "./components/Dashboard";
-import RenderProductDescription from "./components/subcomponents/productPage";
 import Search from "./components/Search";
+import RenderProductDescription from "./components/subcomponents/productPage";
 
 function App() {
 	return (

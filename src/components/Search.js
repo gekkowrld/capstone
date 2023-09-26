@@ -1,6 +1,6 @@
-import { useState, useEffect } from "react";
-import { getFirestore, collection, onSnapshot } from "firebase/firestore";
 import { SearchSharp } from "@mui/icons-material";
+import { collection, getFirestore, onSnapshot } from "firebase/firestore";
+import { useEffect, useState } from "react";
 
 function Search() {
 	const [searchTerm, setSearchTerm] = useState("");

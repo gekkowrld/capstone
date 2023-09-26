@@ -1,16 +1,15 @@
-import { initializeApp } from "firebase/app";
 import { getAnalytics } from "firebase/analytics";
-import { getFirestore } from "firebase/firestore";
-
+import { initializeApp } from "firebase/app";
 import {
 	getAuth,
 	GoogleAuthProvider,
-	signInWithPopup,
 	onAuthStateChanged,
+	signInWithPopup,
 	TwitterAuthProvider
 } from "firebase/auth";
+import { getFirestore } from "firebase/firestore";
+import { getDownloadURL, getStorage, ref } from "firebase/storage";
 import { useEffect, useState } from "react";
-import { getStorage, ref, getDownloadURL } from "firebase/storage";
 
 // https://firebase.google.com/docs/web/setup#available-libraries
 
