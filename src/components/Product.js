@@ -1,73 +1,95 @@
-import { collection, getDocs, onSnapshot } from "firebase/firestore";
 import { useEffect, useState } from "react";
-import LoadingScreen from "../components/Loading";
-import db, { getImageUrl } from "../firebase/sdk";
+import db from "../firebase/sdk";
+import { onSnapshot, collection } from "firebase/firestore";
 import { Card } from "@material-tailwind/react";
+import LoadingScreen from "../components/Loading";
+import { getStorage, getDownloadURL, ref } from "firebase/storage";
+import RenderProductDescription from "./subcomponents/productPage";
+import DynamicMeta from "./DynamicMeta";
 
-const Products = () => {
+export default function Products() {
 	const [products, setProducts] = useState([]);
 	const [loading, setLoading] = useState(false);
 
-	const getProducts = async () => {
-		setLoading(true);
-		const querySnapshot = await getDocs(collection(db, "products"));
-		const productsData = querySnapshot.docs.map(doc => doc.data());
-
-		// Fetch image URLs for all products in parallel
-		const productsWithImageUrls = await Promise.all(
-			productsData.map(async product => {
-				const imageUrl = await getImageUrl(product.img);
-				return { ...product, imageUrl }; // Include imageUrl in the product data
-			})
-		);
-
-		setProducts(productsWithImageUrls);
-		setLoading(false);
-	};
-
 	useEffect(() => {
-		// Initialize the products once on component mount
-		getProducts();
+		const fetchImage = async product => {
+			const imageUrl = await getImageUrl(product.img);
+			return imageUrl;
+		};
 
-		// Set up a real-time listener for updates
+		let storage = getStorage();
+		const getImageUrl = async imageName => {
+			let imageUrl = await getDownloadURL(ref(storage, imageName));
+			return imageUrl;
+		};
+
 		const unsubscribe = onSnapshot(collection(db, "products"), snapshot => {
-			const updatedProducts = snapshot.docs.map(doc => ({
+			const products = snapshot.docs.map(doc => ({
 				...doc.data(),
 				uid: doc.id
 			}));
-			setProducts(updatedProducts);
+			const productPromises = products.map(product =>
+				fetchImage(product)
+			);
+			Promise.all(productPromises).then(imageUrls => {
+				const productsWithImages = products.map((product, index) => ({
+					...product,
+					imageUrl: imageUrls[index]
+				}));
+				setProducts(productsWithImages);
+				setLoading(true);
+			});
 		});
-
-		return () => {
-			unsubscribe();
-		};
+		return unsubscribe;
 	}, []);
 
-	if (loading) {
+	// Set Loading Screen when false ???
+	if (!loading) {
 		return <LoadingScreen />;
 	}
 
-	return (
-		<div className="flex gap-10 flex-wrap justify-center items-center h-screen my-5">
-			{products.map(product => (
-				<div key={product.name}>
-					<Card className="text-center cursor-pointer items-center bg-white p-4">
-						<img
-							src={product.imageUrl}
-							alt={product.name}
-							className="h-32"
-						/>
-						<h1 className="font-bold text-gray-700 text-ellipsis">
-							{product.name}
-						</h1>
-						<h2 className="italic text-orange-400">
-							ksh {product.price}
-						</h2>
-					</Card>
-				</div>
-			))}
-		</div>
-	);
-};
+	// Decorate the price with different font sizes
+	function priceDecorator(price) {
+		const intPart = price.toString().split(".")[0];
+		const _decPart = price.toString().split(".")[1];
+		const decPart = _decPart ? _decPart.padEnd(2, "0") : "00";
+		const formattedIntPart = parseInt(intPart).toLocaleString();
 
-export default Products;
+		return (
+			<div className="inline">
+				<span className="text-lg">{formattedIntPart}</span>
+				<sup className="text-sm">{decPart}</sup>
+			</div>
+		);
+	}
+
+	return (
+		<main className="flex gap-10 flex-wrap justify-start items-center h-screen my-5 mx-7">
+			<DynamicMeta
+				title="Products"
+				description="All products available on the store"
+			/>
+			{products.map(product => (
+				// The RenderProductDescription passed argument apparently only passes the uid
+				<Card
+					onClick={() => (
+						<RenderProductDescription productDetails={product} />
+					)}
+					className="text-center cursor-pointer items-center bg-white p-4 min-w-min max-w-xs"
+					key={product.uid}
+				>
+					<img src={product.imageUrl} alt={product.name} />
+					<a
+						href={"/product/" + product.uid}
+						className="hover:text-orange-300"
+					>
+						<p>{product.name}</p>
+					</a>
+					<div className="italic text-orange-400">
+						KES {priceDecorator(product.price)}
+					</div>
+				</Card>
+			))}
+		</main>
+	);
+}

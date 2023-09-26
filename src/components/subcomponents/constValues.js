@@ -1,3 +1,4 @@
 const projectName = "Capstone Project";
+const productPage = "products";
 
-export { projectName };
+export { projectName, productPage };
