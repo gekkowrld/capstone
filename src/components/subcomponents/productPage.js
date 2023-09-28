@@ -63,7 +63,7 @@ const RenderProductDescription = () => {
 						<img
 							src={imageUrl}
 							alt={product.name}
-							className="w-1/4 m-7"
+							className="w-1/4 h-max m-7"
 						/>
 					)}
 					<Card className="m-9 p-3 w-7/12">

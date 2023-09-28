@@ -4,7 +4,7 @@ function LoginDashboard() {
 		<div className="flex flex-col items-center justify-center h-screen">
 			<h1 className="text-4xl font-bold mb-8">You are not logged In</h1>
 			<a href="/login ">
-				<Button color="lightBlue" ripple="light" size="lg">
+				<Button color="blue-gray" size="lg" ripple>
 					Login
 				</Button>
 			</a>
