@@ -66,7 +66,7 @@ export default function Products() {
 	}
 
 	return (
-		<main className="flex gap-10 flex-wrap justify-start items-center h-screen my-5 mx-7">
+		<main className="flex gap-10 flex-wrap justify-start items-center h-screen mx-7 p-10">
 			<DynamicMeta
 				title="Products"
 				description="All products available on the store"
@@ -80,7 +80,11 @@ export default function Products() {
 					className="text-center cursor-pointer items-center bg-white p-4 min-w-min max-w-xs"
 					key={product.uid}
 				>
-					<img src={product.imageUrl} alt={product.name} />
+					<img
+						src={product.imageUrl}
+						alt={product.name}
+						className="h-32"
+					/>
 					<a
 						href={"/product/" + product.uid}
 						className="hover:text-orange-300"

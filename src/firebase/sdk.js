@@ -31,6 +31,24 @@ const storage = getStorage();
 
 export default getFirestore();
 
+export function setUserId(id) {
+	return id;
+}
+
+/**
+ * The following data are stored in the local storage:
+ * 		- User Photo
+ * 		- User Email
+ * 		- User Display Name
+ *
+ * This information are not "too" sensitive, other
+ * 	sensitive information is not kept in the browser
+ *
+ * If you have any issues and or suggestions about the matter
+ * 	you can open a new issue here:
+ * 		https://github.com/gekkowrld/capstone/issues/new
+ */
+
 const google_provider = new GoogleAuthProvider();
 
 export const signInWithGoogle = () => {
@@ -39,10 +57,13 @@ export const signInWithGoogle = () => {
 			let photo = result.user.photoURL;
 			let name = result.user.displayName;
 			let email = result.user.email;
+			setUserId(result.user.uid);
+			let userId = result.user.uid;
 
 			localStorage.setItem("photo", photo);
 			localStorage.setItem("name", name);
 			localStorage.setItem("email", email);
+			localStorage.setItem("userId", userId);
 		})
 		.catch(error => {
 			console.error(error.message);
