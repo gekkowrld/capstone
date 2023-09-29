@@ -11,7 +11,6 @@ import Home from "./components/Home";
 import Products from "./components/Product";
 import Search from "./components/Search";
 import RenderProductDescription from "./components/subcomponents/productPage";
-import Footer from "./components/Footer";
 
 function App() {
 	return (
@@ -30,7 +29,6 @@ function App() {
 				<Route path="*" element={<PageNotFound />} />
 			</Routes>{" "}
 			<Search />
-			<Footer />
 		</Router>
 	);
 }
