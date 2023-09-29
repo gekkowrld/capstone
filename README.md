@@ -44,6 +44,15 @@ img: "Location_of_the_image_as_saved_in_firebase_storage"
 price: price_of_item
 ```
 
+An example of the data entered:
+
+![Firebase Collection Information](img/Screenshot_20230929_232249.png)
+
+
+The image should be stored in firebase storage. The image should be stored in the specified location as in the `img` field of the product.
+
+![Firebase Storage Information](img/Screenshot_20230929_232914.png)
+
 You can add other info as per your wish.
 
 In firebase storage, add the media that you will use in the site.

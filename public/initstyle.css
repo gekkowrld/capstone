@@ -1,0 +1,23 @@
+.noscript-container {
+	height: 300px;
+	width: 550px;
+	background: rgb(240, 237, 67);
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: space-evenly;
+	border-radius: 17px;
+	outline: 10px #deb447 solid;
+}
+[id^="noscript"] {
+	color: #000000;
+	font-family: "Courier New", Courier, monospace;
+}
+#noscript-main-text {
+	font-size: 24px;
+	font-weight: 900;
+}
+#noscript-sub-text {
+	font-size: 14px;
+	font-weight: 700;
+}

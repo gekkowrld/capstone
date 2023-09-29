@@ -24,10 +24,16 @@
       work correctly both with client-side routing and a non-root public URL.
       Learn how to configure a non-root public URL by running `npm run build`.
     -->
+		<link rel="stylesheet" href="%PUBLIC_URL%/initstyle.css" />
 		<title>Capstone Project</title>
 	</head>
 	<body>
 		<noscript>
+			<!--
+				This styles should just be accesible locally by
+				noscript else the page styles will be applied
+				wrongly (if that is a word)	
+			-->
 			<style>
 				body {
 					display: grid;
@@ -39,35 +45,13 @@
 					width: 100px;
 					position: relative;
 				}
-				.noscript-container {
-					height: 300px;
-					width: 550px;
-					background: rgb(240, 237, 67);
-					display: flex;
-					flex-direction: column;
-					align-items: center;
-					justify-content: space-evenly;
-					border-radius: 17px;
-					outline: 10px #deb447 solid;
-				}
-				[id^="noscript"] {
-					color: #000000;
-					font-family: "Courier New", Courier, monospace;
-				}
-				#noscript-main-text {
-					font-size: 24px;
-					font-weight: 900;
-				}
-				#noscript-sub-text {
-					font-size: 14px;
-					font-weight: 700;
-				}
 				a {
 					color: #00f;
 					text-decoration: none;
 					font-weight: 900;
 				}
 			</style>
+
 			<div class="noscript-container">
 				<img src="javascript.svg" alt="js logo" />
 				<p id="noscript-main-text">Oh No! Javascript is Disabled</p>
