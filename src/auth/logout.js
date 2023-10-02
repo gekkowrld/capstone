@@ -7,8 +7,8 @@ function LogoutForm() {
 		<div className="flex flex-col items-center justify-center h-screen">
 			Are you sure you want to logout?
 			<Button
-				color="lightBlue"
-				ripple="light"
+				color="blue-gray"
+				ripple
 				size="lg"
 				className="text-4xl font-bold mb-8s"
 				type="button"
