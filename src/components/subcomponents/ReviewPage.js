@@ -1,15 +1,17 @@
+import { Button } from "@material-tailwind/react";
 import {
 	collection,
-	query,
-	where,
-	getDocs,
 	doc,
-	getDoc
+	getDoc,
+	getDocs,
+	query,
+	where
 } from "firebase/firestore";
-import db from "../../firebase/sdk";
-import { useState, useEffect } from "react";
 import PropTypes from "prop-types";
-import { Button } from "@material-tailwind/react";
+import { useEffect, useState } from "react";
+
+import db from "../../firebase/sdk";
+
 import AddReview from "./AddReview";
 
 const reviewsRef = collection(db, "reviews");
@@ -61,11 +63,7 @@ export default function ReviewDataShow({ productId }) {
 					console.log(
 						`Error getting user with ID ${review.userId}: ${error}`
 					);
-					return {
-						userId: review.userId,
-						photo: null,
-						name: null
-					};
+					return { userId: review.userId, photo: null, name: null };
 				}
 			});
 

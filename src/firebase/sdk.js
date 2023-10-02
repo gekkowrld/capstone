@@ -7,7 +7,7 @@ import {
 	signInWithPopup,
 	TwitterAuthProvider
 } from "firebase/auth";
-import { getFirestore, doc, setDoc } from "firebase/firestore";
+import { doc, getFirestore, setDoc } from "firebase/firestore";
 import { getDownloadURL, getStorage, ref } from "firebase/storage";
 import { useEffect, useState } from "react";
 
@@ -63,10 +63,7 @@ export const signInWithGoogle = () => {
 			const db = getFirestore();
 			const userRef = doc(db, "users", uid);
 
-			const userData = {
-				photo: photo,
-				name: name
-			};
+			const userData = { photo: photo, name: name };
 
 			setDoc(userRef, userData, { merge: true })
 				.then(() => {

@@ -1,6 +1,7 @@
-import { signOut } from "firebase/auth";
-import { auth } from "../firebase/sdk";
 import { Button } from "@material-tailwind/react";
+import { signOut } from "firebase/auth";
+
+import { auth } from "../firebase/sdk";
 
 function LogoutForm() {
 	return (
