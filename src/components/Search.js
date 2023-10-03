@@ -48,9 +48,23 @@ function Search() {
 		setShowResults(true);
 	};
 
-	const filteredProducts = productsData.filter(product =>
-		product.name.toLowerCase().includes(searchTerm.toLowerCase())
-	);
+	const filteredProducts = productsData.filter(product => {
+		let searchTermLower = searchTerm.toLowerCase();
+		let productNameLower = product.name.toLowerCase();
+
+		const productWords = productNameLower.split(" ");
+		if (productNameLower.startsWith(searchTermLower)) {
+			return true;
+		} else if (productWords.includes(searchTermLower)) {
+			return true;
+		} else if (
+			productWords.some(word => word.startsWith(searchTermLower))
+		) {
+			return true;
+		} else if (productNameLower.includes(searchTermLower)) {
+			return true;
+		} else return false;
+	});
 
 	function handleSlash() {
 		document.addEventListener("keydown", function (event) {
@@ -93,6 +107,7 @@ function Search() {
 					className="w-4/5 h-14 z-50 bg-deep-orange-900 p-14 rounded-md flex items-center justify-center mb-5"
 				>
 					<input
+						autoFocus
 						type="text"
 						value={searchTerm}
 						onChange={handleSearch}

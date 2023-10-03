@@ -87,6 +87,19 @@ export const signInWithTwitter = () => {
 			let name = result.user.displayName;
 			let email = result.user.email;
 
+			const db = getFirestore();
+			const userRef = doc(db, "users", uid);
+
+			const userData = { photo: photo, name: name };
+
+			setDoc(userRef, userData, { merge: true })
+				.then(() => {
+					console.log("User data saved successfully!");
+				})
+				.catch(error => {
+					console.error(error.message);
+				});
+
 			localStorage.setItem("email", email);
 			localStorage.setItem("photo", photo);
 			localStorage.setItem("name", name);

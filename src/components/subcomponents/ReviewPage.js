@@ -52,7 +52,7 @@ export default function ReviewDataShow({ productId }) {
 							name: userDoc.data().name
 						};
 					} else {
-						console.log(`No user found with ID ${review.userId}`);
+						console.error(`No user found with ID ${review.userId}`);
 						return {
 							userId: review.userId,
 							photo: null,
@@ -60,7 +60,7 @@ export default function ReviewDataShow({ productId }) {
 						};
 					}
 				} catch (error) {
-					console.log(
+					console.error(
 						`Error getting user with ID ${review.userId}: ${error}`
 					);
 					return { userId: review.userId, photo: null, name: null };
@@ -70,6 +70,10 @@ export default function ReviewDataShow({ productId }) {
 			const userImagesArray = await Promise.all(imagePromises);
 			const userImagesObject = userImagesArray.reduce((acc, item) => {
 				acc[item.userId] = { photo: item.photo, name: item.name };
+				if (acc[item.userId].photo === null)
+					acc[item.userId].photo = "https://picsum.photos/30";
+				if (acc[item.userId].name === null)
+					acc[item.userId].name = "Unknown User";
 				return acc;
 			}, {});
 
