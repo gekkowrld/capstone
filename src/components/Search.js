@@ -10,7 +10,8 @@ import { Link } from "react-router-dom";
  *  properties are to be reserved ).
  * But the functionality is there.
  *
- * @returns A stylized search bar that allows the user to search for products by name.
+ * @returns A stylized search bar that allows the user to search for products by
+ *     name.
  */
 
 function Search() {
