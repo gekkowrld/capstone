@@ -27,7 +27,10 @@ function App() {
 					path="product/:uid"
 					element={<RenderProductDescription />}
 				/>
-				<Route path="/product/review/:uid" element={<AddReview />} />
+				<Route
+					path="/product/review/:uid"
+					element={<AddReview />}
+				/>
 				<Route path="*" element={<PageNotFound />} />
 			</Routes>{" "}
 			<Search />
