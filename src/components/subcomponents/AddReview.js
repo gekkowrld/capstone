@@ -172,12 +172,14 @@ const AddReview = () => {
 				<div className="flex flex-col items-center">
 					<div className="mb-4 flex flex-col gap-6">
 						<Input
+							aria-label="Topic"
 							size="lg"
 							label="Topic"
 							required
 							defaultValue={review ? review.title : ""}
 						/>
 						<Textarea
+							aria-label="Review"
 							size="lg"
 							label="Review"
 							defaultValue={review ? review.body : ""}
