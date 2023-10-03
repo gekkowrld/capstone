@@ -1,7 +1,7 @@
-import { SearchRounded } from "@mui/icons-material";
-import { collection, getFirestore, onSnapshot } from "firebase/firestore";
-import { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import {SearchRounded} from "@mui/icons-material";
+import {collection, getFirestore, onSnapshot} from "firebase/firestore";
+import {useEffect, useState} from "react";
+import {Link} from "react-router-dom";
 
 /**
  * This search bar was influenced by ALX's search bar.
@@ -10,71 +10,67 @@ import { Link } from "react-router-dom";
  *  properties are to be reserved ).
  * But the functionality is there.
  *
- * @returns A stylized search bar that allows the user to search for products by name.
+ * @returns A stylized search bar that allows the user to search for products by
+ *     name.
  */
 
 function Search() {
-	const [searchTerm, setSearchTerm] = useState("");
-	const [productsData, setProductsData] = useState([]);
-	const [showResults, setShowResults] = useState(false);
-	const [showModal, setShowModal] = useState(false);
+  const [searchTerm, setSearchTerm] = useState("");
+  const [productsData, setProductsData] = useState([]);
+  const [showResults, setShowResults] = useState(false);
+  const [showModal, setShowModal] = useState(false);
 
-	const handleModalClose = () => {
-		setShowModal(false);
-	};
+  const handleModalClose = () => { setShowModal(false); };
 
-	const handleButtonClick = () => {
-		setShowModal(true);
-	};
+  const handleButtonClick = () => { setShowModal(true); };
 
-	useEffect(() => {
-		const db = getFirestore();
-		const productsRef = collection(db, "products");
+  useEffect(() => {
+    const db = getFirestore();
+    const productsRef = collection(db, "products");
 
-		const unsubscribe = onSnapshot(productsRef, snapshot => {
-			const data = [];
-			snapshot.forEach(doc => {
-				const { name, id } = { ...doc.data(), id: doc.id };
-				data.push({ name, id });
-			});
-			setProductsData(data);
-		});
+    const unsubscribe = onSnapshot(productsRef, snapshot => {
+      const data = [];
+      snapshot.forEach(doc => {
+        const {name, id} = {...doc.data(), id : doc.id};
+        data.push({name, id});
+      });
+      setProductsData(data);
+    });
 
-		return () => unsubscribe();
-	}, []);
+    return () => unsubscribe();
+  }, []);
 
-	const handleSearch = event => {
-		setSearchTerm(event.target.value);
-		setShowResults(true);
-	};
+  const handleSearch = event => {
+    setSearchTerm(event.target.value);
+    setShowResults(true);
+  };
 
-	const filteredProducts = productsData.filter(product => {
-		let searchTermLower = searchTerm.toLowerCase();
-		let productNameLower = product.name.toLowerCase();
+  const filteredProducts = productsData.filter(product => {
+    let searchTermLower = searchTerm.toLowerCase();
+    let productNameLower = product.name.toLowerCase();
 
-		const productWords = productNameLower.split(" ");
-		if (productNameLower.startsWith(searchTermLower)) {
-			return true;
-		} else if (productWords.includes(searchTermLower)) {
-			return true;
-		} else if (
-			productWords.some(word => word.startsWith(searchTermLower))
-		) {
-			return true;
-		} else if (productNameLower.includes(searchTermLower)) {
-			return true;
-		} else return false;
-	});
+    const productWords = productNameLower.split(" ");
+    if (productNameLower.startsWith(searchTermLower)) {
+      return true;
+    } else if (productWords.includes(searchTermLower)) {
+      return true;
+    } else if (productWords.some(word => word.startsWith(searchTermLower))) {
+      return true;
+    } else if (productNameLower.includes(searchTermLower)) {
+      return true;
+    } else
+      return false;
+  });
 
-	function handleSlash() {
-		document.addEventListener("keydown", function (event) {
-			if (event.key === "/") {
-				event.preventDefault();
-				setShowModal(true);
-			}
-		});
-	}
-	const displayResults = () => {
+  function handleSlash() {
+    document.addEventListener("keydown", function(event) {
+      if (event.key === "/") {
+        event.preventDefault();
+        setShowModal(true);
+      }
+    });
+  }
+  const displayResults = () => {
 		return (
 			<div className="w-full flex items-center flex-col justify-center overflow-auto">
 				{showResults && (

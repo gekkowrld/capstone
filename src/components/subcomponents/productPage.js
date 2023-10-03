@@ -1,10 +1,10 @@
-import { Card } from "@material-tailwind/react";
-import { collection, doc, getDoc } from "firebase/firestore";
-import { getDownloadURL, getStorage, ref } from "firebase/storage";
-import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import {Card} from "@material-tailwind/react";
+import {collection, doc, getDoc} from "firebase/firestore";
+import {getDownloadURL, getStorage, ref} from "firebase/storage";
+import {useEffect, useState} from "react";
+import {useParams} from "react-router-dom";
 
-import { getUserId } from "../../firebase/sdk";
+import {getUserId} from "../../firebase/sdk";
 import db from "../../firebase/sdk";
 import DynamicMeta from "../DynamicMeta";
 import LoadingScreen from "../Loading";

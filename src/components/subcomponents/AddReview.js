@@ -1,24 +1,25 @@
-import DynamicMeta from "../DynamicMeta";
-import { useParams } from "react-router-dom";
-import { useEffect, useState } from "react";
 import {
-	doc,
-	collection,
-	getDoc,
-	query,
-	where,
-	getDocs,
-	setDoc,
-	updateDoc
-} from "firebase/firestore";
-import db, { getUserId } from "../../firebase/sdk";
-import {
-	Rating,
-	Typography,
-	Button,
-	Input,
-	Textarea
+  Button,
+  Input,
+  Rating,
+  Textarea,
+  Typography
 } from "@material-tailwind/react";
+import {
+  collection,
+  doc,
+  getDoc,
+  getDocs,
+  query,
+  setDoc,
+  updateDoc,
+  where
+} from "firebase/firestore";
+import {useEffect, useState} from "react";
+import {useParams} from "react-router-dom";
+
+import db, {getUserId} from "../../firebase/sdk";
+import DynamicMeta from "../DynamicMeta";
 
 /**
  * Check in the review collection if the user has already reviewed the product.
@@ -28,8 +29,9 @@ import {
  * 		- userId
  *
  * This fields store the info about the product and the user who reviewed it.
- * If the current user had already reviewed the product, then then populate the review
- * 	form with the data from the review. Then use this as the basis of an edit.
+ * If the current user had already reviewed the product, then then populate the
+ * review form with the data from the review. Then use this as the basis of an
+ * edit.
  *
  * If the user has not reviewed the product, then the form is blank and the user
  * 	is required to enter there review.
@@ -59,7 +61,8 @@ import {
  * 			- Timestamp
  *
  * For no reason should the "reviewTime" field be updated.
- * Only update the "editTime" field if the user had already made a review (multiple).
+ * Only update the "editTime" field if the user had already made a review
+ * (multiple).
  */
 
 const reviewRef = collection(db, "reviews");
