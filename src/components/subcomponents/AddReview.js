@@ -1,24 +1,24 @@
 import {
-  Button,
-  Input,
-  Rating,
-  Textarea,
-  Typography
+	Button,
+	Input,
+	Rating,
+	Textarea,
+	Typography
 } from "@material-tailwind/react";
 import {
-  collection,
-  doc,
-  getDoc,
-  getDocs,
-  query,
-  setDoc,
-  updateDoc,
-  where
+	collection,
+	doc,
+	getDoc,
+	getDocs,
+	query,
+	setDoc,
+	updateDoc,
+	where
 } from "firebase/firestore";
-import {useEffect, useState} from "react";
-import {useParams} from "react-router-dom";
+import { useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
 
-import db, {getUserId} from "../../firebase/sdk";
+import db, { getUserId } from "../../firebase/sdk";
 import DynamicMeta from "../DynamicMeta";
 
 /**
