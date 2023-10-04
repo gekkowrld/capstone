@@ -1,7 +1,17 @@
 import { useEffect, useState } from "react";
-import { LoginDashboard, MemberDashboard } from "./subcomponents/dLog";
+import { MemberDashboard } from "./subcomponents/dLog";
 import DynamicMeta from "./DynamicMeta";
 import { auth } from "../firebase/sdk";
+import Providers from "../auth/Providers";
+
+/**
+ * Do not redirect to login (the url) if not logged in
+ *
+ * This is to ensure that if the user logs in successfully, they will be redirected to the dashboard
+ * 	instead of the login page
+ *
+ * In every way this is a hack, but it works and it's not too bad either
+ */
 
 const Dashboard = () => {
 	const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -23,7 +33,7 @@ const Dashboard = () => {
 	return (
 		<>
 			<DynamicMeta title="Dashboard" />
-			{isLoggedIn ? <MemberDashboard /> : <LoginDashboard />}
+			{isLoggedIn ? <MemberDashboard /> : <Providers />}
 		</>
 	);
 };

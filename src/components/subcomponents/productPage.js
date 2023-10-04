@@ -8,6 +8,7 @@ import { getUserId } from "../../firebase/sdk";
 import db from "../../firebase/sdk";
 import DynamicMeta from "../DynamicMeta";
 import LoadingScreen from "../Loading";
+import Header from "../Header";
 
 import ReviewDataShow from "./ReviewPage";
 
@@ -67,6 +68,7 @@ const RenderProductDescription = () => {
 
 	return (
 		<div>
+			<Header />
 			{product ? (
 				<div className="flex flex-row flex-wrap">
 					<DynamicMeta

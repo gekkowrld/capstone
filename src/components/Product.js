@@ -5,6 +5,8 @@ import { useEffect, useState } from "react";
 
 import LoadingScreen from "../components/Loading";
 import db from "../firebase/sdk";
+import Header from "./Header";
+import Footer from "./Footer";
 
 import DynamicMeta from "./DynamicMeta";
 import RenderProductDescription from "./subcomponents/productPage";
@@ -66,36 +68,44 @@ export default function Products() {
 	}
 
 	return (
-		<main className="flex gap-10 flex-wrap justify-start items-center h-screen mx-7 p-10">
-			<DynamicMeta
-				title="Products"
-				description="All products available on the store"
-			/>
-			{products.map(product => (
-				// The RenderProductDescription passed argument apparently only passes the uid
-				<Card
-					onClick={() => (
-						<RenderProductDescription productDetails={product} />
-					)}
-					className="text-center cursor-pointer items-center bg-white p-4 min-w-min max-w-xs"
-					key={product.uid}
-				>
-					<img
-						src={product.imageUrl}
-						alt={product.name}
-						className="h-32"
+		<>
+			<Header />
+			<div className="h-screen flex flex-col">
+				<main className="flex gap-10 flex-wrap justify-start items-center mx-7 p-10">
+					<DynamicMeta
+						title="Products"
+						description="All products available on the store"
 					/>
-					<a
-						href={"/product/" + product.uid}
-						className="hover:text-orange-300"
-					>
-						<p>{product.name}</p>
-					</a>
-					<div className="italic text-orange-400">
-						KES {priceDecorator(product.price)}
-					</div>
-				</Card>
-			))}
-		</main>
+					{products.map(product => (
+						// The RenderProductDescription passed argument apparently only passes the uid
+						<Card
+							onClick={() => (
+								<RenderProductDescription
+									productDetails={product}
+								/>
+							)}
+							className="text-center cursor-pointer items-center bg-white p-4 min-w-min max-w-xs"
+							key={product.uid}
+						>
+							<img
+								src={product.imageUrl}
+								alt={product.name}
+								className="h-32"
+							/>
+							<a
+								href={"/product/" + product.uid}
+								className="hover:text-orange-300"
+							>
+								<p>{product.name}</p>
+							</a>
+							<div className="italic text-orange-400">
+								KES {priceDecorator(product.price)}
+							</div>
+						</Card>
+					))}
+				</main>
+				<Footer />
+			</div>
+		</>
 	);
 }

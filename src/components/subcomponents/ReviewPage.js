@@ -30,7 +30,7 @@ export default function ReviewDataShow({ productId }) {
 			const querySnapshot = await getDocs(productReview);
 			const reviewsData = [];
 			querySnapshot.forEach(doc => {
-				reviewsData.push(doc.data());
+				reviewsData.push({ ...doc.data(), id: doc.id });
 			});
 			setReviews(reviewsData);
 		}
@@ -134,13 +134,15 @@ export default function ReviewDataShow({ productId }) {
 				</div>
 			))}
 			<div className="mt-4">
-				<Button
-					onClick={() => <AddReview productId={productId} />}
-					color="blue"
-					ripple
-				>
-					<a href={"/product/review/" + productId}>Write Review</a>
-				</Button>
+				<a href={"/product/review/" + productId}>
+					<Button
+						onClick={() => <AddReview productId={productId} />}
+						color="blue"
+						ripple
+					>
+						Write a review
+					</Button>
+				</a>
 			</div>
 		</div>
 	);
