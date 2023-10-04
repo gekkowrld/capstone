@@ -1,0 +1,23 @@
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // Allow read-only access to the "products" collection for everyone.
+	// Allow read-write access to admin.
+    match /products/{document=**} {
+      allow read;
+	  allow read, write: if request.auth != null && request.auth.token.admin == true;
+    }
+
+    // Allow read-write access to the "review" collection for logged-in users,
+    // read-only access for not logged-in users.
+    match /reviews/{document=**} {
+      allow read, write: if request.auth != null;
+      allow read: if request.auth == null;
+    }
+
+    // Restrict access to other documents and collections to admin only.
+    match /{document=**} {
+      allow read, write: if request.auth != null && request.auth.token.admin == true;
+    }
+  }
+}
