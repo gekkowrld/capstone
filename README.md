@@ -48,7 +48,6 @@ An example of the data entered:
 
 ![Firebase Collection Information](img/Screenshot_20230929_232249.png)
 
-
 The image should be stored in firebase storage. The image should be stored in the specified location as in the `img` field of the product.
 
 ![Firebase Storage Information](img/Screenshot_20230929_232914.png)
@@ -61,7 +60,7 @@ In firebase storage, add the media that you will use in the site.
 
 This project uses images, multimedia, info and other resources from the internet. I do not own any of the resources used in this project. This project is for educational purposes only.
 
-A special mention goes to [`Amazon`](https://amazon.com) for providing most (if not all) the e commerce info and layout design and [`picsum`](htpps://picsum.photos) for providing the images used as profile picture placeholder.
+A special mention goes to [`Amazon`](https://amazon.com) for providing most (if not all) the e commerce info and layout design and [`picsum`](https://picsum.photos/) for providing the images used as profile picture placeholder.
 
 This project is released under the [UNLICENSE License](UNLICENSE). Please see the `UNLICENSE` file for more information. If the license is not suitable for your use case, you can use the resources used in this project according to the license of the respective resource. The logo(s) of the project is also released under the same license.
 

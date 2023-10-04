@@ -10,7 +10,29 @@ import { Link } from "react-router-dom";
  *  properties are to be reserved ).
  * But the functionality is there.
  *
- * @returns A stylized search bar that allows the user to search for products by name.
+ * The products are first fetched from the database.
+ * After fetching (probably every time the user presses the search bar (or slash)),
+ * 	this is to "ensure" that the products are up to date.
+ *
+ * This is to ensure that less api calls are made while keeping everything up to date.
+ * 		(If the products are not fetched every time the user presses the search bar,
+ * 			then the products will not be up to date.)
+ *
+ * The products are then filtered by the search term.
+ * 		(If the search term is empty, then no product is displayed.)
+ *
+ * This style is not recommended for production (or large dataset).
+ * This is because the search is done on the client side.
+ * This means that the client will have to download all the products (the name and id) of the products collection.
+ * This is not efficient.
+ *
+ * If you have a large dataset, then you should use Algolia (or other products).
+ * 	There are many tutorials on how to use Algolia with Firebase.
+ *
+ * Or if you hate non open source products, then you can use ElasticSearch (not fully open source).
+ *
+ * @returns A stylized search bar that allows the user to search for products by
+ *     name.
  */
 
 function Search() {
@@ -48,9 +70,23 @@ function Search() {
 		setShowResults(true);
 	};
 
-	const filteredProducts = productsData.filter(product =>
-		product.name.toLowerCase().includes(searchTerm.toLowerCase())
-	);
+	const filteredProducts = productsData.filter(product => {
+		let searchTermLower = searchTerm.toLowerCase();
+		let productNameLower = product.name.toLowerCase();
+
+		const productWords = productNameLower.split(" ");
+		if (productNameLower.startsWith(searchTermLower)) {
+			return true;
+		} else if (productWords.includes(searchTermLower)) {
+			return true;
+		} else if (
+			productWords.some(word => word.startsWith(searchTermLower))
+		) {
+			return true;
+		} else if (productNameLower.includes(searchTermLower)) {
+			return true;
+		} else return false;
+	});
 
 	function handleSlash() {
 		document.addEventListener("keydown", function (event) {
@@ -93,6 +129,7 @@ function Search() {
 					className="w-4/5 h-14 z-50 bg-deep-orange-900 p-14 rounded-md flex items-center justify-center mb-5"
 				>
 					<input
+						autoFocus
 						type="text"
 						value={searchTerm}
 						onChange={handleSearch}

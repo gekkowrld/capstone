@@ -7,7 +7,7 @@ import {
 	signInWithPopup,
 	TwitterAuthProvider
 } from "firebase/auth";
-import { getFirestore } from "firebase/firestore";
+import { doc, getFirestore, setDoc } from "firebase/firestore";
 import { getDownloadURL, getStorage, ref } from "firebase/storage";
 import { useEffect, useState } from "react";
 
@@ -28,12 +28,9 @@ const app = initializeApp(firebaseConfig);
 export const auth = getAuth(app);
 const analytics = getAnalytics(app);
 const storage = getStorage();
+const userAuth = getAuth();
 
 export default getFirestore();
-
-export function setUserId(id) {
-	return id;
-}
 
 /**
  * The following data are stored in the local storage:
@@ -57,13 +54,24 @@ export const signInWithGoogle = () => {
 			let photo = result.user.photoURL;
 			let name = result.user.displayName;
 			let email = result.user.email;
-			setUserId(result.user.uid);
-			let userId = result.user.uid;
+			let uid = result.user.uid;
 
 			localStorage.setItem("photo", photo);
 			localStorage.setItem("name", name);
 			localStorage.setItem("email", email);
-			localStorage.setItem("userId", userId);
+
+			const db = getFirestore();
+			const userRef = doc(db, "users", uid);
+
+			const userData = { photo: photo, name: name };
+
+			setDoc(userRef, userData, { merge: true })
+				.then(() => {
+					console.log("User data saved successfully!");
+				})
+				.catch(error => {
+					console.error(error.message);
+				});
 		})
 		.catch(error => {
 			console.error(error.message);
@@ -78,6 +86,19 @@ export const signInWithTwitter = () => {
 			let photo = result.user.photoURL;
 			let name = result.user.displayName;
 			let email = result.user.email;
+
+			const db = getFirestore();
+			const userRef = doc(db, "users", uid);
+
+			const userData = { photo: photo, name: name };
+
+			setDoc(userRef, userData, { merge: true })
+				.then(() => {
+					console.log("User data saved successfully!");
+				})
+				.catch(error => {
+					console.error(error.message);
+				});
 
 			localStorage.setItem("email", email);
 			localStorage.setItem("photo", photo);
@@ -115,3 +136,23 @@ export async function getImageUrl(location) {
 	const ImageURL = await getDownloadURL(ref(storage, location));
 	return ImageURL;
 }
+
+/**
+ * Since this is "sensitive" information, it should not be stored
+ * 	anywhere in the device
+ *
+ * This function is to be used to get user unique identifier (uid)
+ *
+ * @returns Promise to return userId
+ */
+export const getUserId = () => {
+	return new Promise((resolve, reject) => {
+		onAuthStateChanged(auth, user => {
+			if (user) {
+				resolve(user.uid);
+			} else {
+				reject(new Error("User not authenticated"));
+			}
+		});
+	});
+};

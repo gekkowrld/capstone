@@ -4,14 +4,19 @@ import { getDownloadURL, getStorage, ref } from "firebase/storage";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 
+import { getUserId } from "../../firebase/sdk";
 import db from "../../firebase/sdk";
 import DynamicMeta from "../DynamicMeta";
 import LoadingScreen from "../Loading";
+import Header from "../Header";
+
+import ReviewDataShow from "./ReviewPage";
 
 const RenderProductDescription = () => {
 	const { uid } = useParams();
 	const [product, setProduct] = useState(null);
 	const [imageUrl, setImageUrl] = useState(null);
+	const [userUid, setUserUid] = useState(null);
 
 	const formatCapacity = capacity => {
 		if (capacity < 900) {
@@ -34,6 +39,16 @@ const RenderProductDescription = () => {
 				console.error("Something went wrong!");
 			}
 		};
+		const fetchUserId = async () => {
+			try {
+				const userId = await getUserId();
+				setUserUid(userId);
+			} catch (error) {
+				console.error("Error:", error.message);
+			}
+		};
+
+		fetchUserId();
 		fetchProduct();
 	}, [uid]);
 
@@ -53,6 +68,7 @@ const RenderProductDescription = () => {
 
 	return (
 		<div>
+			<Header />
 			{product ? (
 				<div className="flex flex-row flex-wrap">
 					<DynamicMeta
@@ -62,7 +78,7 @@ const RenderProductDescription = () => {
 					{imageUrl && (
 						<img
 							src={imageUrl}
-							alt={product.name}
+							alt={product.name + userUid}
 							className="w-1/4 h-max m-7"
 						/>
 					)}
@@ -135,6 +151,7 @@ const RenderProductDescription = () => {
 								{product.model}
 							</p>
 						)}
+						<ReviewDataShow productId={uid} />
 					</Card>
 				</div>
 			) : (
