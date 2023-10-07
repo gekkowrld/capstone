@@ -7,7 +7,7 @@
 # This assumes that you have everything installed and setup properly.
 
 # Variables
-name := $(shell echo $$USER)
+seed := $(shell date | tr ' ' '-' | tr ':' '-' | tr \[:upper:\]  \[:lower:\])
 current_dir := $(shell echo $$PWD)
 
 # This is the default target.
@@ -40,7 +40,7 @@ deploy: build
 # It will expire in 2 days.
 .PHONY: preview
 preview: build
-	firebase hosting:channel:deploy $(name) --expires 2d
+	firebase hosting:channel:deploy $(seed) --expires 1d
 
 # Format the code
 

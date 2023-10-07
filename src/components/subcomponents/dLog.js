@@ -1,7 +1,7 @@
 import { Button, Card } from "@material-tailwind/react";
 import DynamicMeta from "../DynamicMeta";
-import { Settings } from "@mui/icons-material";
 import Header from "../Header";
+import { oneLineLoading } from "../Loading";
 function LoginDashboard() {
 	return (
 		<div className="flex flex-col items-center justify-center h-screen">
@@ -21,11 +21,14 @@ function MemberDashboard() {
 	const namePhotoSeed = `https://picsum.photos/seed/${
 		localStorage.getItem("name").replace(" ", "").toLowerCase() || "user"
 	}/200`;
+
 	return (
 		<>
 			<Header />
 			<DynamicMeta
-				title={localStorage.getItem("name") || "User"}
+				title={
+					"Dashboard | " + (localStorage.getItem("name") || "User")
+				}
 				description={localStorage.getItem("name") + "'s dashboard"}
 			/>
 			<Card
@@ -50,9 +53,8 @@ function MemberDashboard() {
 				</div>
 			</Card>
 			<Card className="p-5 w-full">
-				<p>
-					<Settings /> Settings
-				</p>
+				<h2 className="text-center font-bold">Your Cart</h2>
+				{oneLineLoading()}
 			</Card>
 		</>
 	);

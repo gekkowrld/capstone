@@ -1,5 +1,5 @@
 import DynamicMeta from "../components/DynamicMeta";
-import { signInWithGoogle, signInWithTwitter } from "../firebase/sdk";
+import { signInWithGoogle, signInWithTwitter } from "../sdk/firebase";
 import Footer from "../components/Footer";
 
 const Providers = () => {

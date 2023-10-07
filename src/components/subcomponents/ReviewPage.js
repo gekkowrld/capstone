@@ -10,7 +10,7 @@ import {
 import PropTypes from "prop-types";
 import { useEffect, useState } from "react";
 
-import db from "../../firebase/sdk";
+import db from "../../sdk/firebase";
 
 import AddReview from "./AddReview";
 
@@ -128,9 +128,9 @@ export default function ReviewDataShow({ productId }) {
 								/>
 							</svg>
 						))}
-						<p className="font-bold">{review.title}</p>
+						<p className="font-bold">{review.review}</p>
 					</div>
-					<p>{review.body}</p>
+					<pre>{review.reviewBody}</pre>
 				</div>
 			))}
 			<div className="mt-4">

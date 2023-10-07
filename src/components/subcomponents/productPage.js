@@ -4,13 +4,14 @@ import { getDownloadURL, getStorage, ref } from "firebase/storage";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 
-import { getUserId } from "../../firebase/sdk";
-import db from "../../firebase/sdk";
+import { getUserId } from "../../sdk/firebase";
+import db from "../../sdk/firebase";
 import DynamicMeta from "../DynamicMeta";
 import LoadingScreen from "../Loading";
 import Header from "../Header";
 
 import ReviewDataShow from "./ReviewPage";
+import AddToCart from "./AddToCart";
 
 const RenderProductDescription = () => {
 	const { uid } = useParams();
@@ -151,6 +152,7 @@ const RenderProductDescription = () => {
 								{product.model}
 							</p>
 						)}
+						<AddToCart product={product} />
 						<ReviewDataShow productId={uid} />
 					</Card>
 				</div>

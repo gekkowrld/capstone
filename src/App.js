@@ -8,9 +8,9 @@ import Dashboard from "./components/Dashboard";
 import Home from "./components/Home";
 import Products from "./components/Product";
 import Search from "./components/Search";
-import AddReview from "./components/subcomponents/AddReview";
 import RenderProductDescription from "./components/subcomponents/productPage";
 import LoginUser from "./auth/login";
+import AddAReview from "./components/subcomponents/reviewAdd";
 
 function App() {
 	return (
@@ -25,7 +25,7 @@ function App() {
 					path="product/:uid"
 					element={<RenderProductDescription />}
 				/>
-				<Route path="/product/review/:uid" element={<AddReview />} />
+				<Route path="/product/review/:uid" element={<AddAReview />} />
 				<Route path="*" element={<PageNotFound />} />
 			</Routes>{" "}
 			<Search />

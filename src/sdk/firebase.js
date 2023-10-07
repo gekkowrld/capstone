@@ -28,7 +28,7 @@ const app = initializeApp(firebaseConfig);
 export const auth = getAuth(app);
 const analytics = getAnalytics(app);
 const storage = getStorage();
-const userAuth = getAuth();
+export { analytics };
 
 export default getFirestore();
 
@@ -86,6 +86,7 @@ export const signInWithTwitter = () => {
 			let photo = result.user.photoURL;
 			let name = result.user.displayName;
 			let email = result.user.email;
+			let uid = result.user.uid;
 
 			const db = getFirestore();
 			const userRef = doc(db, "users", uid);

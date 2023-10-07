@@ -8,7 +8,7 @@ import {
 import { logo } from "../assets/img";
 import { v4 as uuidv4 } from "uuid";
 import { projectName } from "./subcomponents/constValues";
-import { auth } from "../firebase/sdk";
+import { auth } from "../sdk/firebase";
 
 // This value is bound to change
 let picsumSeed = uuidv4().replace(/[^a-zA-Z ]/g, "");

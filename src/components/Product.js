@@ -4,7 +4,7 @@ import { getDownloadURL, getStorage, ref } from "firebase/storage";
 import { useEffect, useState } from "react";
 
 import LoadingScreen from "../components/Loading";
-import db from "../firebase/sdk";
+import db from "../sdk/firebase";
 import Header from "./Header";
 import Footer from "./Footer";
 

@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import DynamicMeta from "../components/DynamicMeta";
-import { auth } from "../firebase/sdk";
+import { auth } from "../sdk/firebase";
 import Providers from "../auth/Providers";
 import Home from "../components/Home";
 
