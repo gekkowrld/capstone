@@ -2,6 +2,49 @@
 
 This is an E-Commerce Website hosted on Firebase. The assets for the project are stored in Firebase Database and Storage. Images stored alongside the code ([src/assets](src/assets) folder) are used for initial rendering of the website and cannot be stored anywhere lest the page layout be broken.
 
+>> Start of school specific requirements
+
+## This is a school project. The following are the requirements for the project
+
+### Capstone Project: E-Commerce Application with Firebase Firestore
+
+#### Objective
+
+This capstone project aims to design and implement a fully functional e-commerce application using multimedia systems concepts and Firebase Firestore for backend storage and hosting. The project will also integrate social media authentication features, allowing users to log in using their Twitter, Facebook, or Google accounts.
+
+> I couldn't implement "Facebook" authentication as I couldn't meet all the requirements to get my app authenticated or get the required authentication. I have implemented "Google" and "Twitter" authentication.
+
+### Features to Implement
+
+#### User Experience
+
+- [x] **User Authentication**: Integrate OAuth to enable users to sign in using social media accounts (Twitter, Facebook, Google).
+- [ ] **Product Gallery**: Display available products in an organized, visually appealing manner.
+- [ ] **Shopping Cart**: Allow users to add items to their cart, view it, and proceed to checkout.
+- [ ] **Order History**: Enable users to view their past orders.
+- [ ] **Search and Filters**: Users should be able to search products and filter results based on categories, ratings, etc.
+- [ ] **User Profiles**: Users should have profiles where they can view and manage their information.
+- [x] **Product Reviews and Ratings**: Users should be able to review and rate purchased products.
+
+#### Backend
+
+- [ ] **Firebase Firestore**: Store product data, user profiles, and order histories in Firebase Firestore.
+- [x] **File Hosting**: Use Firebase for hosting multimedia elements like product images.
+- [x] **Data Management**: Structure Firestore collections and documents for optimal data access and security.
+- [ ] **Backend Logic**: Implement backend logic for order processing, inventory management, etc.
+
+### Evaluation
+
+The project will be evaluated based on the following criteria:
+
+1. **Functionality**: All features must be fully functional.
+2. **User Experience**: Usability and design of the user interface.
+3. **Code Quality**: Proper structure, readability, and documentation.
+4. **Backend Structure**: Efficient use of Firebase Firestore and Firebase Authentication.
+5. **Security**: Implementation of secure authentication and data access.
+
+>> End of school specific requirements
+
 ## Installation
 
 First [clone](https://docs.github.com/en/repositories/creating-and-managing-repositories/cloning-a-repository) the project to your local development. You can use `git` to clone the repo. For Linux, MacOS and most *nix OS'es have it installed by default. If on Windows or not installed you can download the repo as a zip file or install on windows [git for windows](https://gitforwindows.org/) or [other os'es](https://git-scm.com/).
