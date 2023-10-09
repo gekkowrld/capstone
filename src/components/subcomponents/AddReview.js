@@ -149,9 +149,9 @@ const AddReview = () => {
 						: null}
 					{isReviewAvailable
 						? localStorage.setItem(
-								reviewAvailable,
-								isReviewAvailable
-						  )
+							reviewAvailable,
+							isReviewAvailable
+						)
 						: null}
 					<Input
 						type="text"

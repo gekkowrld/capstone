@@ -11,10 +11,12 @@ import Search from "./components/Search";
 import RenderProductDescription from "./components/subcomponents/productPage";
 import LoginUser from "./auth/login";
 import AddAReview from "./components/subcomponents/reviewAdd";
+import NetworkMeter from "./components/subcomponents/networkStatus";
 
 function App() {
 	return (
 		<Router>
+			<NetworkMeter />
 			<Routes>
 				<Route path="/" element={<Home />} />
 				<Route path="/products" element={<Products />} />

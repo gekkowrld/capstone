@@ -1,19 +1,7 @@
-import { Button, Card } from "@material-tailwind/react";
+import { Card } from "@material-tailwind/react";
 import DynamicMeta from "../DynamicMeta";
 import Header from "../Header";
-import { oneLineLoading } from "../Loading";
-function LoginDashboard() {
-	return (
-		<div className="flex flex-col items-center justify-center h-screen">
-			<h1 className="text-4xl font-bold mb-8">You are not logged In</h1>
-			<a href="/login ">
-				<Button color="blue-gray" size="lg" ripple>
-					Login
-				</Button>
-			</a>
-		</div>
-	);
-}
+import DisplayCartItems from "./DisplayCartItems";
 
 function MemberDashboard() {
 	// Seed the same image for the user for consistency sake
@@ -54,10 +42,10 @@ function MemberDashboard() {
 			</Card>
 			<Card className="p-5 w-full">
 				<h2 className="text-center font-bold">Your Cart</h2>
-				{oneLineLoading()}
+				<DisplayCartItems />
 			</Card>
 		</>
 	);
 }
 
-export { LoginDashboard, MemberDashboard };
+export { MemberDashboard };

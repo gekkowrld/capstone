@@ -47,3 +47,7 @@ preview: build
 .PHONY: format
 format:
 	npx prettier $(current_dir) --write
+
+.PHONY: rules
+rules:
+	firebase deploy --only firestore:rules

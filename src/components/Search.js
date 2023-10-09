@@ -146,6 +146,8 @@ function Search() {
 		<div>
 			{handleSlash()}
 			<button
+				aria-description="Search for products"
+				aria-label="search"
 				onClick={handleButtonClick}
 				className="fixed z-40 h-14 w-14 bottom-11 bg-deep-orange-800 right-11 rounded-lg text-white flex items-center justify-center border border-black"
 			>
@@ -157,21 +159,6 @@ function Search() {
 				/>
 			</button>
 			{showModal && createModal()}
-			{/* <div>
-				{showResults && (
-					<ul className="w-full flex items-center flex-col">
-						{filteredProducts.map(product => (
-							<li
-								className="w-4/5 h-14 z-40 bg-deep-orange-900 p-14 rounded-md flex items-center justify-center flex-col"
-								key={product.id}>
-								<a href={"/product/" + product.id}>
-									{product.name}
-								</a>
-							</li>
-						))}
-					</ul>
-				)}
-			</div> */}
 		</div>
 	);
 }

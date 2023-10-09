@@ -14,6 +14,9 @@ function LogoutForm() {
 				setIsLoggedIn(true);
 			} else {
 				setIsLoggedIn(false);
+				localStorage.removeItem("capstone_g_name");
+				localStorage.removeItem("capstone_g_photo");
+				localStorage.removeItem("capstone_g_email");
 			}
 		});
 
