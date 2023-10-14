@@ -1,85 +1,47 @@
-import {
-	Button,
-	Input,
-	Rating,
-	Textarea,
-	Typography
-} from "@material-tailwind/react";
+import { useEffect, useState } from "react";
+import { getUserId } from "../../sdk/firebase";
+import { useParams } from "react-router-dom";
 import {
 	collection,
 	doc,
 	getDoc,
-	getDocs,
-	query,
 	setDoc,
-	updateDoc,
-	where
+	serverTimestamp
 } from "firebase/firestore";
-import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
-
-import db, { getUserId } from "../../firebase/sdk";
+import db from "../../sdk/firebase";
+import Rating from "@mui/material/Rating";
+import StarIcon from "@mui/icons-material/Star";
+import { loadingSquare } from "../../assets/img";
+import { Edit } from "@mui/icons-material";
 import DynamicMeta from "../DynamicMeta";
+import { Input, Textarea, Button } from "@material-tailwind/react";
 
 /**
- * Check in the review collection if the user has already reviewed the product.
+ * Save the user review using the document id of:
+ * 		- the user + the product id
+ * 		e.g if the product id is 1234567890 and the user id is 0987654321
+ * 			then the document id will be 0987654321-1234567890
  *
- * The relevant fields are:
- * 		- productId
- * 		- userId
- *
- * This fields store the info about the product and the user who reviewed it.
- * If the current user had already reviewed the product, then then populate the
- * review form with the data from the review. Then use this as the basis of an
- * edit.
- *
- * If the user has not reviewed the product, then the form is blank and the user
- * 	is required to enter there review.
- *
- * The form should have the following fields:
- * 		- Title
- * 		- Rating (Should be displayed as stars but stored as a number)
- * 		- Review
- * 		- Submit Button
- *
- * The info sent back to the Firestore Database should be:
- * 		- title
- * 			- String
- * 		- rating
- * 			- Number
- * 		- body
- * 			- String
- * 		- productId
- * 			- String
- * 		- userId
- * 			- String
- * 		- reviewTime
- * 			- Timestamp
- *
- * If the user had already made a review, a new field should be created called
- * 		- editTime
- * 			- Timestamp
- *
- * For no reason should the "reviewTime" field be updated.
- * Only update the "editTime" field if the user had already made a review
- * (multiple).
+ * This will make it easier to query the reviews of a specific user
+ *	and avoid having to query all the reviews and then filter them/duplicate them
  */
 
-const reviewRef = collection(db, "reviews");
-
 const AddReview = () => {
-	<DynamicMeta title="Add Review" />;
-	const { uid } = useParams();
+	const [review, setReview] = useState("");
+	const [rating, setRating] = useState(null);
+	const [reviewBody, setReviewBody] = useState("");
+	const [userId, setUserId] = useState(null);
+	const productId = useParams().uid;
+	const [isReviewAvailable, setIsReviewAvailable] = useState(false);
 	const [product, setProduct] = useState(null);
-	const [user, setUser] = useState(null);
-	const [review, setReview] = useState(null);
-	const [_userId, _setUserId] = useState(null);
-	const [rated, setRated] = useState(1);
-	const [isEditing, setIsEditing] = useState(false);
 
+	let reviewKey = `capstone_g_-review-${productId}}`;
+	let ratingKey = `capstone_g_-rating-${productId}}`;
+	let reviewBodyKey = `capstone_g_-reviewBody-${productId}}`;
+	let reviewAvailable = `capstone_g_-reviewAvailable-${productId}}`;
 	useEffect(() => {
 		const fetchProduct = async () => {
-			const productRef = doc(collection(db, "products"), uid);
+			const productRef = doc(collection(db, "products"), productId);
 			const productDoc = await getDoc(productRef);
 			if (productDoc.exists()) {
 				setProduct(productDoc.data());
@@ -87,128 +49,161 @@ const AddReview = () => {
 				console.error("Something went wrong!");
 			}
 		};
-		const fetchUser = async () => {
+
+		const fetchUserId = async () => {
 			try {
 				const userId = await getUserId();
-				const userRef = doc(collection(db, "users"), userId);
-				const userDoc = await getDoc(userRef);
-				if (userId) {
-					_setUserId(userId);
-				}
-				if (userDoc.exists()) {
-					setUser(userDoc.data());
-				} else {
-					console.error("Something went wrong!");
-				}
+				setUserId(userId);
 			} catch (error) {
 				console.error("Error:", error.message);
 			}
 		};
 
-		const fetchReviews = async () => {
-			const productReview = query(
-				reviewRef,
-				where("productId", "==", uid),
-				where("userId", "==", _userId)
+		const fetchUserProductReview = async () => {
+			const userProductReviewRef = doc(
+				collection(db, "reviews"),
+				`${userId}-${productId}`
 			);
-			const querySnapshot = await getDocs(productReview);
-			const reviewArr = [];
-			querySnapshot.forEach(doc => {
-				reviewArr.push({ ...doc.data(), id: doc.id });
-			});
-
-			if (reviewArr.length > 0) {
-				const existingReview = reviewArr[0];
-				setReview(existingReview);
-				setIsEditing(true);
+			const userProductReviewDoc = await getDoc(userProductReviewRef);
+			if (userProductReviewDoc.exists()) {
+				setReview(userProductReviewDoc.data().review);
+				setRating(userProductReviewDoc.data().rating);
+				setReviewBody(userProductReviewDoc.data().reviewBody);
+				setIsReviewAvailable(true);
+			}
+		};
+		const saveDataToLocalStorage = () => {
+			if (review) {
+				localStorage.setItem(reviewKey, review);
+			}
+			if (rating) {
+				localStorage.setItem(ratingKey, rating);
+			}
+			if (reviewBody) {
+				localStorage.setItem(reviewBodyKey, reviewBody);
+			}
+			if (isReviewAvailable) {
+				localStorage.setItem(reviewAvailable, isReviewAvailable);
 			}
 		};
 
-		fetchUser();
+		saveDataToLocalStorage();
+		fetchUserProductReview();
+		fetchUserId();
 		fetchProduct();
-		fetchReviews();
 	}, []);
 
-	const submitForm = async () => {
-		const title = document.querySelector("input").value;
-		const body = document.querySelector("textarea").value;
-		const rating = rated;
-		const productId = uid;
-		const userId = _userId;
-		const reviewTime = new Date();
-
-		if (isEditing) {
-			const editTime = new Date();
-			const reviewRef = doc(
-				collection(db, "reviews"),
-				review.id // Assuming you have the review document ID
-			);
-			await updateDoc(reviewRef, {
-				title,
-				body,
-				rating,
-				productId,
-				userId,
-				editTime
+	const saveReview = async () => {
+		if (isReviewAvailable) {
+			await setDoc(doc(db, "reviews", `${userId}-${productId}`), {
+				review: review,
+				rating: rating,
+				reviewBody: reviewBody,
+				userId: userId,
+				productId: productId,
+				updateTime: serverTimestamp()
 			});
 		} else {
-			const reviewRef = doc(collection(db, "reviews"));
-			await setDoc(reviewRef, {
-				title,
-				body,
-				rating,
-				productId,
-				userId,
-				reviewTime
+			await setDoc(doc(db, "reviews", `${userId}-${productId}`), {
+				review: review,
+				rating: rating,
+				reviewBody: reviewBody,
+				userId: userId,
+				productId: productId,
+				reviewTime: serverTimestamp()
 			});
 		}
+
+		localStorage.removeItem(reviewKey);
+		localStorage.removeItem(ratingKey);
+		localStorage.removeItem(reviewBodyKey);
+		localStorage.removeItem(reviewAvailable);
 	};
 
 	return (
-		<div className="w-full center h-screen flex flex-col justify-center">
-			<DynamicMeta
-				title={`Add Review for ${product ? product.name : "?!"} (${
-					user ? user.name : "?!"
-				})`}
-			/>
-			<form>
-				<div className="flex flex-col items-center">
-					<div className="mb-4 flex flex-col gap-6">
-						<Input
-							aria-label="Topic"
-							size="lg"
-							label="Topic"
-							required
-							defaultValue={review ? review.title : ""}
-						/>
-						<Textarea
-							aria-label="Review"
-							size="lg"
-							label="Review"
-							defaultValue={review ? review.body : ""}
-						/>
-					</div>
-					<div className="flex items-center gap-2">
-						<Rating value={1} onChange={value => setRated(value)} />
-						<Typography color="blue-gray" className="font-medium">
-							{rated}.0 Rated
-						</Typography>
-					</div>
-					<Button
-						type="submit"
-						color="blue"
-						ripple
-						className="mt-6"
-						onClick={e => {
-							e.preventDefault();
-							submitForm();
+		<>
+			{isReviewAvailable ? (
+				<DynamicMeta
+					title={
+						"Editing review for " + (product ? product.name : "?!")
+					}
+				/>
+			) : (
+				<DynamicMeta
+					title={
+						"Adding review for" + (product ? product.name : "?!")
+					}
+				/>
+			)}
+			<div className="flex flex-col justify-center items-center">
+				<div className="w-3/4 flex gap-8 flex-col">
+					{isReviewAvailable ? (
+						<p>Edit Review {<Edit />}</p>
+					) : (
+						<p>Add Review {<Edit />}</p>
+					)}
+					{review ? localStorage.setItem(reviewKey, review) : null}
+					{rating ? localStorage.setItem(ratingKey, rating) : null}
+					{reviewBody
+						? localStorage.setItem(reviewBodyKey, reviewBody)
+						: null}
+					{isReviewAvailable
+						? localStorage.setItem(
+							reviewAvailable,
+							isReviewAvailable
+						)
+						: null}
+					<Input
+						type="text"
+						placeholder="Review"
+						onChange={e => setReview(e.target.value)}
+						defaultValue={review}
+						label="Review"
+						className="font-bold"
+					/>
+					<Textarea
+						placeholder="Review Body"
+						onChange={e => setReviewBody(e.target.value)}
+						defaultValue={reviewBody}
+						label="Review Body"
+						slots={{
+							input: reviewBody
+						}}
+					/>
+					<Rating
+						name="hover-feedback"
+						value={rating}
+						onChange={(event, newValue) => {
+							setRating(newValue);
+						}}
+						emptyIcon={
+							<StarIcon
+								style={{ opacity: 0.55 }}
+								fontSize="inherit"
+							/>
+						}
+					/>
+					<button
+						onClick={() => {
+							setRating(localStorage.getItem(ratingKey));
+							setReview(localStorage.getItem(reviewKey));
+							setReviewBody(localStorage.getItem(reviewBodyKey));
+							setIsReviewAvailable(
+								localStorage.getItem(reviewAvailable)
+							);
 						}}
 					>
-						Submit
-					</Button>
+						<img
+							className="w-10 h-10"
+							src={loadingSquare}
+							alt="Load previous data"
+						/>
+					</button>
+					<br />
+					<Button onClick={() => saveReview()}>Submit</Button>
 				</div>
-			</form>
-		</div>
+			</div>
+		</>
 	);
 };
 

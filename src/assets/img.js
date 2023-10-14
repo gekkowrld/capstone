@@ -3,5 +3,15 @@ import logoDark from "./logoDark.png";
 import logoLight from "./logoLight.png";
 import logo from "./Logo.png";
 import cartImgL from "./cart_ok.svg";
+import loadingCircle from "./circleLoading.svg";
+import loadingSquare from "./load_data_square.svg";
 
-export { cartIMgX, logoDark, logoLight, logo, cartImgL };
+export {
+	cartIMgX,
+	logoDark,
+	logoLight,
+	logo,
+	cartImgL,
+	loadingCircle,
+	loadingSquare
+};

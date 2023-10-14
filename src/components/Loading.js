@@ -1,3 +1,5 @@
+import { loadingCircle } from "../assets/img";
+
 const LoadingScreen = () => {
 	return (
 		<div className="h-screen bg-white z-50 w-screen">
@@ -47,4 +49,17 @@ const LoadingScreen = () => {
 	);
 };
 
+const oneLineLoading = () => {
+	return (
+		<div>
+			<img
+				src={loadingCircle}
+				alt="loading"
+				className="animate-spin h-10 w-10"
+			/>
+		</div>
+	);
+};
+
+export { oneLineLoading };
 export default LoadingScreen;

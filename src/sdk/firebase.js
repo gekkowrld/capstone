@@ -28,7 +28,7 @@ const app = initializeApp(firebaseConfig);
 export const auth = getAuth(app);
 const analytics = getAnalytics(app);
 const storage = getStorage();
-const userAuth = getAuth();
+export { analytics };
 
 export default getFirestore();
 
@@ -56,9 +56,9 @@ export const signInWithGoogle = () => {
 			let email = result.user.email;
 			let uid = result.user.uid;
 
-			localStorage.setItem("photo", photo);
-			localStorage.setItem("name", name);
-			localStorage.setItem("email", email);
+			localStorage.setItem("capstone_g_photo", photo);
+			localStorage.setItem("capstone_g_name", name);
+			localStorage.setItem("capstone_g_email", email);
 
 			const db = getFirestore();
 			const userRef = doc(db, "users", uid);
@@ -86,6 +86,7 @@ export const signInWithTwitter = () => {
 			let photo = result.user.photoURL;
 			let name = result.user.displayName;
 			let email = result.user.email;
+			let uid = result.user.uid;
 
 			const db = getFirestore();
 			const userRef = doc(db, "users", uid);
@@ -100,9 +101,9 @@ export const signInWithTwitter = () => {
 					console.error(error.message);
 				});
 
-			localStorage.setItem("email", email);
-			localStorage.setItem("photo", photo);
-			localStorage.setItem("name", name);
+			localStorage.setItem("capstone_g_email", email);
+			localStorage.setItem("capstone_g_photo", photo);
+			localStorage.setItem("capstone_g_name", name);
 		})
 		.catch(error => {
 			console.error(error.message);
