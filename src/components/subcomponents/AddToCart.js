@@ -16,17 +16,30 @@
  *
  */
 
-import { AddShoppingCartSharp } from "@mui/icons-material";
-import { useState } from "react";
+import { AddShoppingCartSharp, Save } from "@mui/icons-material";
+import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
+import db, { getUserId } from "../../sdk/firebase";
+import { Button } from "@mui/material";
+import { collection, doc, setDoc } from "firebase/firestore";
 
 const AddToCart = () => {
 	const [productCount, setProductCount] = useState(1);
 	const [showModal, setShowModal] = useState(false);
+	const [userId, setUserId] = useState("");
 	const { uid } = useParams();
 
-	const productStorageName = `capstone_g_product-${uid}`;
-
+	useEffect(() => {
+		const fetchUserId = async () => {
+			try {
+				const userId = await getUserId();
+				setUserId(userId);
+			} catch (error) {
+				console.error("Error:", error.message);
+			}
+		};
+		fetchUserId();
+	});
 	const handleIncrement = () => {
 		setProductCount(productCount + 1);
 	};
@@ -35,14 +48,23 @@ const AddToCart = () => {
 		if (productCount > 1) {
 			setProductCount(productCount - 1);
 		} else {
-			// remove the product entry from the local storage and close the modal
-			localStorage.removeItem(productStorageName);
 			setShowModal(false);
 		}
 	};
 
 	const toggleModal = () => {
 		setShowModal(!showModal);
+	};
+
+	const saveData = async () => {
+		let cartRef = doc(db, "cartItems", userId);
+		let cVal = collection(cartRef, uid);
+		let dVal = doc(cVal, uid);
+		await setDoc(
+			dVal,
+			{ quantity: productCount, userId, productId: uid },
+			{ merge: true }
+		);
 	};
 
 	const showProductCountModal = () => {
@@ -57,7 +79,6 @@ const AddToCart = () => {
 					</span>
 				</button>
 				{productCount}
-				{localStorage.setItem(productStorageName, productCount)}
 				<button
 					className="flex h-9 w-9 items-center bg-orange-500 hover:bg-orange-800 transition-all rounded-md p-2 justify-center"
 					onClick={handleIncrement}
@@ -66,6 +87,10 @@ const AddToCart = () => {
 						+
 					</span>
 				</button>
+				<Button onClick={saveData} disabled={!userId}>
+					<Save />
+					Save To Cart
+				</Button>
 			</div>
 		);
 	};
