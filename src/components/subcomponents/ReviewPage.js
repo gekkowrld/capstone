@@ -16,18 +16,15 @@ import AddReview from "./AddReview";
 
 const reviewsRef = collection(db, "reviews");
 
-export default function ReviewDataShow({ productId }) {
+export default function ReviewDataShow({ bookId }) {
 	const [reviews, setReviews] = useState([]);
 	const [userImages, setUserImages] = useState({});
 
 	useEffect(() => {
 		async function fetchReviews() {
-			const productReview = query(
-				reviewsRef,
-				where("productId", "==", productId)
-			);
+			const bookReview = query(reviewsRef, where("bookId", "==", bookId));
 
-			const querySnapshot = await getDocs(productReview);
+			const querySnapshot = await getDocs(bookReview);
 			const reviewsData = [];
 			querySnapshot.forEach(doc => {
 				reviewsData.push({ ...doc.data(), id: doc.id });
@@ -36,7 +33,7 @@ export default function ReviewDataShow({ productId }) {
 		}
 
 		fetchReviews();
-	}, [productId]);
+	}, [bookId]);
 
 	useEffect(() => {
 		async function fetchUserImages() {
@@ -134,9 +131,9 @@ export default function ReviewDataShow({ productId }) {
 				</div>
 			))}
 			<div className="mt-4">
-				<a href={"/product/review/" + productId}>
+				<a href={"/book/review/" + bookId}>
 					<Button
-						onClick={() => <AddReview productId={productId} />}
+						onClick={() => <AddReview bookId={bookId} />}
 						color="blue"
 						ripple
 					>
@@ -149,5 +146,5 @@ export default function ReviewDataShow({ productId }) {
 }
 
 ReviewDataShow.propTypes = {
-	productId: PropTypes.string.isRequired
+	bookId: PropTypes.string.isRequired
 };

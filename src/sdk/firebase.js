@@ -5,7 +5,8 @@ import {
 	GoogleAuthProvider,
 	onAuthStateChanged,
 	signInWithPopup,
-	TwitterAuthProvider
+	TwitterAuthProvider,
+	GithubAuthProvider
 } from "firebase/auth";
 import { doc, getFirestore, setDoc } from "firebase/firestore";
 import { getDownloadURL, getStorage, ref } from "firebase/storage";
@@ -50,6 +51,38 @@ const google_provider = new GoogleAuthProvider();
 
 export const signInWithGoogle = () => {
 	signInWithPopup(auth, google_provider)
+		.then(result => {
+			let photo = result.user.photoURL;
+			let name = result.user.displayName;
+			let email = result.user.email;
+			let uid = result.user.uid;
+
+			localStorage.setItem("capstone_g_photo", photo);
+			localStorage.setItem("capstone_g_name", name);
+			localStorage.setItem("capstone_g_email", email);
+
+			const db = getFirestore();
+			const userRef = doc(db, "users", uid);
+
+			const userData = { photo: photo, name: name };
+
+			setDoc(userRef, userData, { merge: true })
+				.then(() => {
+					console.log("User data saved successfully!");
+				})
+				.catch(error => {
+					console.error(error.message);
+				});
+		})
+		.catch(error => {
+			console.error(error.message);
+		});
+};
+
+const github_provider = new GithubAuthProvider();
+
+export const signInWithGithub = () => {
+	signInWithPopup(auth, github_provider)
 		.then(result => {
 			let photo = result.user.photoURL;
 			let name = result.user.displayName;
