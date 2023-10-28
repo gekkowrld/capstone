@@ -57,14 +57,10 @@ export const signInWithGoogle = () => {
 			let email = result.user.email;
 			let uid = result.user.uid;
 
-			localStorage.setItem("capstone_g_photo", photo);
-			localStorage.setItem("capstone_g_name", name);
-			localStorage.setItem("capstone_g_email", email);
-
 			const db = getFirestore();
 			const userRef = doc(db, "users", uid);
 
-			const userData = { photo: photo, name: name };
+			const userData = { photo: photo, name: name, userId: uid };
 
 			setDoc(userRef, userData, { merge: true })
 				.then(() => {
@@ -89,14 +85,10 @@ export const signInWithGithub = () => {
 			let email = result.user.email;
 			let uid = result.user.uid;
 
-			localStorage.setItem("capstone_g_photo", photo);
-			localStorage.setItem("capstone_g_name", name);
-			localStorage.setItem("capstone_g_email", email);
-
 			const db = getFirestore();
 			const userRef = doc(db, "users", uid);
 
-			const userData = { photo: photo, name: name };
+			const userData = { photo: photo, name: name, userId: uid };
 
 			setDoc(userRef, userData, { merge: true })
 				.then(() => {
@@ -124,7 +116,7 @@ export const signInWithTwitter = () => {
 			const db = getFirestore();
 			const userRef = doc(db, "users", uid);
 
-			const userData = { photo: photo, name: name };
+			const userData = { photo: photo, name: name, userId: uid };
 
 			setDoc(userRef, userData, { merge: true })
 				.then(() => {
@@ -133,10 +125,6 @@ export const signInWithTwitter = () => {
 				.catch(error => {
 					console.error(error.message);
 				});
-
-			localStorage.setItem("capstone_g_email", email);
-			localStorage.setItem("capstone_g_photo", photo);
-			localStorage.setItem("capstone_g_name", name);
 		})
 		.catch(error => {
 			console.error(error.message);
@@ -155,10 +143,8 @@ export const isLoggedIn = () => {
 		onAuthStateChanged(auth, user => {
 			if (user) {
 				setLoggedIn(true);
-				console.log("User is logged in (authStateChanged)");
 			} else {
 				setLoggedIn(false);
-				console.log("User is not logged in (authStateChanged)");
 			}
 		});
 	}, []);
