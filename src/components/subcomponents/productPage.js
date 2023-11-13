@@ -1,62 +1,62 @@
-import { useEffect, useState } from "react";
-import { collection, doc, getDoc } from "firebase/firestore";
-import { getDownloadURL, getStorage, ref } from "firebase/storage";
-import { useParams } from "react-router-dom";
+import {Card} from "@material-tailwind/react";
+import {collection, doc, getDoc} from "firebase/firestore";
+import {getDownloadURL, getStorage, ref} from "firebase/storage";
+import {useEffect, useState} from "react";
+import {useParams} from "react-router-dom";
 
-import { getUserId } from "../../sdk/firebase";
+import {getUserId} from "../../sdk/firebase";
 import db from "../../sdk/firebase";
-import DynamicMeta from "../DynamicMeta";
-import LoadingScreen from "../Loading";
-import Header from "../Header";
-
-import ReviewDataShow from "./ReviewPage";
-import AddToCart from "./AddToCart";
-import { Card } from "@material-tailwind/react";
 import PageNotFound from "../404";
+import DynamicMeta from "../DynamicMeta";
+import Header from "../Header";
+import LoadingScreen from "../Loading";
+
+import AddToCart from "./AddToCart";
+import ReviewDataShow from "./ReviewPage";
 
 const RenderProductDescription = () => {
-	const { uid } = useParams();
-	const [book, setProduct] = useState(null);
-	const [imageUrl, setImageUrl] = useState(null);
-	const [userUid, setUserUid] = useState(null);
-	const [loading, setLoading] = useState(true);
+  const {uid} = useParams();
+  const [book, setProduct] = useState(null);
+  const [imageUrl, setImageUrl] = useState(null);
+  const [userUid, setUserUid] = useState(null);
+  const [loading, setLoading] = useState(true);
 
-	useEffect(() => {
-		const fetchProduct = async () => {
-			const bookRef = doc(collection(db, "books"), uid);
-			const bookDoc = await getDoc(bookRef);
-			if (bookDoc.exists()) {
-				const bookData = bookDoc.data();
-				setProduct(bookData);
+  useEffect(() => {
+    const fetchProduct = async () => {
+      const bookRef = doc(collection(db, "books"), uid);
+      const bookDoc = await getDoc(bookRef);
+      if (bookDoc.exists()) {
+        const bookData = bookDoc.data();
+        setProduct(bookData);
 
-				const storageRef = ref(getStorage(), bookData.img_url);
-				const url = await getDownloadURL(storageRef);
-				setImageUrl(url);
-			} else {
-				setLoading(false);
-				console.error("No Image for this book");
-			}
-		};
-		const fetchUserId = async () => {
-			try {
-				const userId = await getUserId();
-				setUserUid(userId);
-			} catch (error) {
-				console.error(error);
-			}
-		};
+        const storageRef = ref(getStorage(), bookData.img_url);
+        const url = await getDownloadURL(storageRef);
+        setImageUrl(url);
+      } else {
+        setLoading(false);
+        console.error("No Image for this book");
+      }
+    };
+    const fetchUserId = async () => {
+      try {
+        const userId = await getUserId();
+        setUserUid(userId);
+      } catch (error) {
+        console.error(error);
+      }
+    };
 
-		fetchUserId();
-		fetchProduct().then(() => setLoading(false));
-	}, [uid]);
+    fetchUserId();
+    fetchProduct().then(() => setLoading(false));
+  }, [ uid ]);
 
-	function priceDecorator(price) {
-		const intPart = price.toString().split(".")[0];
-		const _decPart = price.toString().split(".")[1];
-		const decPart = _decPart ? _decPart.padEnd(2, "0") : "00";
-		const formattedIntPart = parseInt(intPart).toLocaleString();
+  function priceDecorator(price) {
+    const intPart = price.toString().split(".")[0];
+    const _decPart = price.toString().split(".")[1];
+    const decPart = _decPart ? _decPart.padEnd(2, "0") : "00";
+    const formattedIntPart = parseInt(intPart).toLocaleString();
 
-		return (
+                return (
 			<div className="inline">
 				<span className="text-lg">{formattedIntPart}</span>
 				<span className="text-sm">.{decPart}</span>
@@ -73,15 +73,17 @@ const RenderProductDescription = () => {
 				<div className="flex justify-center">
 					<div className="flex flex-row flex-wrap w-11/12">
 						<DynamicMeta
-							title={book.title}
-							description={book.title + book.description}
-						/>
+                title = {book.title} description =
+                {
+                  book.title + book.description
+                } />
 						<p className="text-center font-bold text-2xl">
 							{book.title}
-						</p>
-						<div className="flex w-full py-8 flex-grow-0 justify-center bg-gray-300 rounded-md">
-							<img
-								src={imageUrl}
+						</p >
+                    <div className =
+                         "flex w-full py-8 flex-grow-0 justify-center bg-gray-300 rounded-md"><
+                    img
+                                                                src={imageUrl}
 								alt={book.name}
 								className="h-96"
 							/>
@@ -168,7 +170,7 @@ const RenderProductDescription = () => {
 								</>
 							}
 							{
-								<>
+                                                                <>
 									<p className="text-black font-bold">
 										Other Links:{" "}
 									</p>
@@ -190,10 +192,8 @@ const RenderProductDescription = () => {
 								</>
 							}
 							{
-								<>
-									<p className="text-black font-bold">
-										Dates:{" "}
-									</p>
+      <><p className = "text-black font-bold">Dates: {" "}<
+          /p>
 									{book.dates ? (
 										book.dates.map(date => {
 											return <p key={uid}>{date}</p>;
@@ -202,13 +202,13 @@ const RenderProductDescription = () => {
 										<p>No dates exists</p>
 									)}
 								</>
-							}
-							{
+  }
+                                                        {
 								<>
-									{book.item.notes ? (
-										<p className="text-black font-bold">
-											Notes
-										</p>
+									{
+    book.item.notes
+        ? (<p className = "text-black font-bold">Notes<
+              /p>
 									) : (
 										""
 									)}
@@ -226,8 +226,8 @@ const RenderProductDescription = () => {
 				</div>
 			) : (
 				<PageNotFound />
-			)}
-		</div>
+			)
+} < /div>
 	);
 };
 
