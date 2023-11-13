@@ -32,7 +32,7 @@
 			<!--
 				This styles should just be accesible locally by
 				noscript else the page styles will be applied
-				wrongly (if that is a word)	
+				wrongly (if that is a word)
 			-->
 			<style>
 				body {
@@ -53,7 +53,7 @@
 			</style>
 
 			<div class="noscript-container">
-				<img src="javascript.svg" alt="js logo" />
+				<img src="%PUBLIC_URL%/javascript.svg" alt="js logo" />
 				<p id="noscript-main-text">Oh No! Javascript is Disabled</p>
 				<p id="noscript-sub-text">
 					This site relies on Javascript. Please<a
@@ -63,6 +63,10 @@
 					</a>
 					it!
 				</p>
+				<a
+					href="https://developer.mozilla.org/en-US/docs/Web/javascript"
+					>Learn More about javascript</a
+				>
 			</div>
 		</noscript>
 		<div id="root"></div>
