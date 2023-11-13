@@ -19,12 +19,12 @@ function App() {
 			<NetworkMeter />
 			<Routes>
 				<Route path="/" element={<Home />} />
-				<Route path="/products" element={<Products />} />
+				<Route path="/books" element={<Products />} />
 				<Route path="/dashboard" element={<Dashboard />} />
 				<Route path="/login" element={<LoginUser />} />
 				<Route path="/logout" element={<LogoutPath />} />
 				<Route
-					path="product/:uid"
+					path="book/:uid"
 					element={<RenderProductDescription />}
 				/>
 				<Route path="/product/review/:uid" element={<AddAReview />} />
