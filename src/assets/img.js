@@ -5,6 +5,7 @@ import logo from "./Logo.png";
 import cartImgL from "./cart_ok.svg";
 import loadingCircle from "./circleLoading.svg";
 import loadingSquare from "./load_data_square.svg";
+import masterHeaderBG from "./masthead_background.jpg";
 
 export {
 	cartIMgX,
@@ -13,5 +14,6 @@ export {
 	logo,
 	cartImgL,
 	loadingCircle,
-	loadingSquare
+	loadingSquare,
+	masterHeaderBG
 };
