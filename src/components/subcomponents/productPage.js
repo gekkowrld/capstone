@@ -104,12 +104,12 @@ const RenderProductDescription = () => {
 									)}
 									{book.contributor
 										? book.contributor.map(contributor => {
-												return (
-													<p key={uid}>
-														{contributor}
-													</p>
-												);
-										  })
+											return (
+												<p key={uid}>
+													{contributor}
+												</p>
+											);
+										})
 										: ""}
 								</>
 							}
@@ -214,8 +214,8 @@ const RenderProductDescription = () => {
 									)}
 									{book.item.notes
 										? book.item.notes.map(note => {
-												return <p key={uid}>{note}</p>;
-										  })
+											return <p key={uid}>{note}</p>;
+										})
 										: ""}
 								</>
 							}
