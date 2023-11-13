@@ -1,7 +1,6 @@
-import { Card } from "@material-tailwind/react";
+import { useEffect, useState } from "react";
 import { collection, doc, getDoc } from "firebase/firestore";
 import { getDownloadURL, getStorage, ref } from "firebase/storage";
-import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 
 import { getUserId } from "../../sdk/firebase";
@@ -12,32 +11,30 @@ import Header from "../Header";
 
 import ReviewDataShow from "./ReviewPage";
 import AddToCart from "./AddToCart";
+import { Card } from "@material-tailwind/react";
+import PageNotFound from "../404";
 
 const RenderProductDescription = () => {
 	const { uid } = useParams();
-	const [product, setProduct] = useState(null);
+	const [book, setProduct] = useState(null);
 	const [imageUrl, setImageUrl] = useState(null);
 	const [userUid, setUserUid] = useState(null);
-
-	const formatCapacity = capacity => {
-		if (capacity < 900) {
-			return `${capacity} GB`;
-		} else {
-			return `${(capacity / 1000).toFixed(1)} TB`;
-		}
-	};
+	const [loading, setLoading] = useState(true);
 
 	useEffect(() => {
 		const fetchProduct = async () => {
-			const productRef = doc(collection(db, "products"), uid);
-			const productDoc = await getDoc(productRef);
-			if (productDoc.exists()) {
-				setProduct(productDoc.data());
-				const storageRef = ref(getStorage(), productDoc.data().img);
+			const bookRef = doc(collection(db, "books"), uid);
+			const bookDoc = await getDoc(bookRef);
+			if (bookDoc.exists()) {
+				const bookData = bookDoc.data();
+				setProduct(bookData);
+
+				const storageRef = ref(getStorage(), bookData.img_url);
 				const url = await getDownloadURL(storageRef);
 				setImageUrl(url);
 			} else {
-				console.error("Something went wrong!");
+				setLoading(false);
+				console.error("No Image for this book");
 			}
 		};
 		const fetchUserId = async () => {
@@ -45,12 +42,12 @@ const RenderProductDescription = () => {
 				const userId = await getUserId();
 				setUserUid(userId);
 			} catch (error) {
-				console.error("Error:", error.message);
+				console.error(error);
 			}
 		};
 
 		fetchUserId();
-		fetchProduct();
+		fetchProduct().then(() => setLoading(false));
 	}, [uid]);
 
 	function priceDecorator(price) {
@@ -66,98 +63,169 @@ const RenderProductDescription = () => {
 			</div>
 		);
 	}
-
+	console.log(userUid);
 	return (
 		<div>
 			<Header />
-			{product ? (
-				<div className="flex flex-row flex-wrap">
-					<DynamicMeta
-						title={product.name}
-						description={product.name + product.description}
-					/>
-					{imageUrl && (
-						<img
-							src={imageUrl}
-							alt={product.name + userUid}
-							className="w-1/4 h-max m-7"
+			{loading ? (
+				<LoadingScreen />
+			) : book ? (
+				<div className="flex justify-center">
+					<div className="flex flex-row flex-wrap w-11/12">
+						<DynamicMeta
+							title={book.title}
+							description={book.title + book.description}
 						/>
-					)}
-					<Card className="m-9 p-3 w-7/12">
 						<p className="text-center font-bold text-2xl">
-							{product.name}
+							{book.title}
 						</p>
-						<div className="italic text-gray-800">
-							<span className="text-black font-bold">
-								Price:{" "}
-							</span>
-							KES {priceDecorator(product.price)}
+						<div className="flex w-full py-8 flex-grow-0 justify-center bg-gray-300 rounded-md">
+							<img
+								src={imageUrl}
+								alt={book.name}
+								className="h-96"
+							/>
 						</div>
-						<p className="text-gray-800">
-							<span className="text-black font-bold">
-								Attribute:{" "}
-							</span>
-							<a
-								href={product.attr}
-								className="hover:text-orange-300 hover:underline"
-							>
-								{product.attr}
-							</a>
-						</p>
-						{product.color && (
-							<p className="text-gray-800">
+						<Card className="p-3 my-5 w-full">
+							<div className="italic text-gray-800">
 								<span className="text-black font-bold">
-									Color:{" "}
+									Price:{" "}
 								</span>
-								{product.color}
-							</p>
-						)}
-						{product.brand && (
-							<p className="text-gray-800">
-								<span className="text-black font-bold">
-									Brand:{" "}
-								</span>
-								{product.brand}
-							</p>
-						)}
-						{product.capacity && (
-							<p className="text-gray-800">
-								<span className="text-black font-bold">
-									Memory:{" "}
-								</span>
-								{formatCapacity(product.capacity)}
-							</p>
-						)}
-						{product.ram && (
-							<p className="text-gray-800">
-								<span className="text-black font-bold">
-									RAM:{" "}
-								</span>
-								{formatCapacity(product.ram)}
-							</p>
-						)}
-						{product.cpu && (
-							<p className="text-gray-800">
-								<span className="text-black font-bold">
-									Processor:{" "}
-								</span>
-								{product.cpu}
-							</p>
-						)}
-						{product.model && (
-							<p className="text-gray-800">
-								<span className="text-black font-bold">
-									Model:{" "}
-								</span>
-								{product.model}
-							</p>
-						)}
-						<AddToCart product={product} />
-						<ReviewDataShow productId={uid} />
-					</Card>
+								{book.currency} {priceDecorator(book.price)}
+							</div>
+							{
+								<>
+									{book.contributor ? (
+										<p className="text-black font-bold">
+											Contributors:
+										</p>
+									) : (
+										""
+									)}
+									{book.contributor
+										? book.contributor.map(contributor => {
+												return (
+													<p key={uid}>
+														{contributor}
+													</p>
+												);
+										  })
+										: ""}
+								</>
+							}
+							{
+								<>
+									{book.description ? (
+										<>
+											<p>Description</p>
+											<p>{book.description}</p>
+										</>
+									) : (
+										""
+									)}
+								</>
+							}
+							{
+								<>
+									<p className="text-black font-bold">
+										LCCN Permalink:{" "}
+									</p>
+									{
+										<p className="hover:text-orange-300">
+											{book.url ? (
+												<a
+													href={book.url}
+													target="_blank"
+													rel="noreferrer"
+												>
+													{book.url}
+												</a>
+											) : (
+												"No book url"
+											)}
+										</p>
+									}
+								</>
+							}
+							{
+								<>
+									<p className="text-black font-bold">
+										LC classification:{" "}
+									</p>
+									{
+										<p>
+											{book.shelf_id
+												? book.shelf_id
+												: "No shelf id"}
+										</p>
+									}
+								</>
+							}
+							{
+								<>
+									<p className="text-black font-bold">ID: </p>
+									{<p>{book.id ? book.id : "No shelf id"}</p>}
+								</>
+							}
+							{
+								<>
+									<p className="text-black font-bold">
+										Other Links:{" "}
+									</p>
+									{book.aka ? (
+										book.aka.map(a__ => {
+											return (
+												<a
+													className="hover:text-orange-300"
+													key={uid}
+													href={a__}
+												>
+													{a__}
+												</a>
+											);
+										})
+									) : (
+										<p>No Extra Links</p>
+									)}
+								</>
+							}
+							{
+								<>
+									<p className="text-black font-bold">
+										Dates:{" "}
+									</p>
+									{book.dates ? (
+										book.dates.map(date => {
+											return <p key={uid}>{date}</p>;
+										})
+									) : (
+										<p>No dates exists</p>
+									)}
+								</>
+							}
+							{
+								<>
+									{book.item.notes ? (
+										<p className="text-black font-bold">
+											Notes
+										</p>
+									) : (
+										""
+									)}
+									{book.item.notes
+										? book.item.notes.map(note => {
+												return <p key={uid}>{note}</p>;
+										  })
+										: ""}
+								</>
+							}
+							<AddToCart book={book} />
+							<ReviewDataShow bookId={uid} />
+						</Card>
+					</div>
 				</div>
 			) : (
-				<LoadingScreen />
+				<PageNotFound />
 			)}
 		</div>
 	);
