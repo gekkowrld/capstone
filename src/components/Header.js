@@ -84,7 +84,7 @@ export default function Header() {
 							<Dashboard className="h-4 w-4" />
 						</IconButton>
 					</Typography>
-					<Typography as="a" href="/products">
+					<Typography as="a" href="/books">
 						<IconButton variant="text" color="blue-gray">
 							<ShoppingBagIcon className="h-4 w-4" />
 						</IconButton>

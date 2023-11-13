@@ -1,5 +1,9 @@
 import DynamicMeta from "../components/DynamicMeta";
-import { signInWithGoogle, signInWithTwitter } from "../sdk/firebase";
+import {
+	signInWithGithub,
+	signInWithGoogle,
+	signInWithTwitter
+} from "../sdk/firebase";
 import Footer from "../components/Footer";
 
 const Providers = () => {
@@ -24,9 +28,16 @@ const Providers = () => {
 
 					<button
 						onClick={signInWithTwitter}
-						className="bg-blue-400 hover:bg-blue-500 text-white font-semibold py-2 px-4 rounded-full w-full duration-500 ease-in-out"
+						className="bg-blue-400 hover:bg-blue-500 text-white font-semibold py-2 px-4 rounded-full w-full duration-500 ease-in-out mb-4"
 					>
 						Login with Twitter
+					</button>
+
+					<button
+						onClick={signInWithGithub}
+						className="bg-blue-400 hover:bg-blue-500 text-white font-semibold py-2 px-4 rounded-full w-full duration-500 ease-in-out"
+					>
+						Login with Github
 					</button>
 				</div>
 			</div>

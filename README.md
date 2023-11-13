@@ -109,6 +109,8 @@ This project is released under the [UNLICENSE License](UNLICENSE). Please see th
 
 I have tried to include the attributes of the resources used in this project in the respective file of each project. If you find any resource that is not properly attributed, please let me know and I will update the `README.md` and or file(s) of the project.
 
-I'm using the free tier of Firebase. So, the project may not work if the free tier is exhausted. If you find any issues, please let me know and I will try to fix it as soon as possible. You can [open a new issue](https://github.com/gekkowrld/capstone/issues/new)
+I'm using the free tier of Firebase. So, the project may not work if the free tier is exhausted. If you find any issues, please let me know and I will try to fix it as soon as possible. You can [open a new issue](https://github.com/gekkowrld/capstone/issues/new). If you are wondering on what I'm talking about, please refer to [Firebase Pricing](https://firebase.google.com/pricing) and this [Stack Overflow Question](https://stackoverflow.com/questions/67297700/firebase-spark-plan-hosting-daily-or-monthly-data-transfer-limits). If you see this message, it means that the free tier has been exhausted and the project is not working, and I'm popular, yay!
+
+![Quota exceeded](https://i.stack.imgur.com/qVCkD.png)
 
 :warning: **Don't use this repo (or the code inside) in production (or anywhere that security is of utmost importance) as it has security issues. This issues are due to some dependencies that react depends on and cannot be easily updated because of [dependency hell](https://blog.tidelift.com/dependency-hell) and other issues. This dependency security issues range from moderate to high. Please look at the dependencies and try and resolve the issues**
