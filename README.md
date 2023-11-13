@@ -77,33 +77,45 @@ REACT_APP_MEASUREMENT_ID = "X-XXXXXXXXX"
 
 ## Firebase setup
 
-After [registering your app](https://firebase.google.com/docs/web/setup) you need to a `collection` known as `products`. This will contain the products the you will display.
+After [registering your app](https://firebase.google.com/docs/web/setup) you need to a `collection` known as `books`. This will contain the products the you will display.
 
-The products should contain the following compulsory data:
+To make it easier to include the required data, you can use the following python script to add the data to the database.
+The code can be found in the github gist [here](https://gist.github.com/gekkowrld/6cdbd3ca23648930fdd8611293d1f688)
+Copy the link if the above link doesn't work <https://gist.github.com/gekkowrld/6cdbd3ca23648930fdd8611293d1f688>
+You are free to modify the code as per your needs.
+Or use your own method to add the data to the database.
 
-```txt
-name: "The name of the product"
-img: "Location_of_the_image_as_saved_in_firebase_storage"
-price: price_of_item
-```
-
-An example of the data entered:
-
-![Firebase Collection Information](img/Screenshot_20230929_232249.png)
-
-The image should be stored in firebase storage. The image should be stored in the specified location as in the `img` field of the product.
-
-![Firebase Storage Information](img/Screenshot_20230929_232914.png)
-
-You can add other info as per your wish.
-
-In firebase storage, add the media that you will use in the site.
+Beware that loc.gov doesn't guarantee availability of all fields.
+So, you may have to manually add the missing fields.
+For the image field I have added a placeholder image.
+The placeholder image is not actually uploaded to the database.
+This is to provide flexibility on what image is to be displayed if the image is not available.
+You can use the picsum api to generate a random image.
 
 ## Disclaimer
 
-This project uses images, multimedia, info and other resources from the internet. I do not own any of the resources used in this project. This project is for educational purposes only.
+This project uses images, multimedia, info and other resources from the internet.
+I do not own any of the resources used in this project.
+This project is for educational purposes only.
+I have tried to make the website responsive, but it may not be responsive on all devices.
+The UI is not the best, but I have tried to make it as good as possible.
+If you have any suggestions, please let me know.
 
-A special mention goes to [`Amazon`](https://amazon.com) for providing most (if not all) the e commerce info and layout design and [`picsum`](https://picsum.photos/) for providing the images used as profile picture placeholder.
+The following resources are used in this project:
+
+- [Firebase](https://firebase.google.com/) (Firebase Authentication, Firebase Firestore, Firebase Storage, Firebase Hosting)
+- [React](https://reactjs.org/) (React, React DOM, React Scripts)
+- [React Router](https://reactrouter.com/) (React Router DOM)
+- [TailwindCSS](https://tailwindcss.com/) (Styling)
+- [LOC.gov](https://www.loc.gov/) (Images, Info)
+- [Picsum](https://picsum.photos/) (Images)
+- [Amazon](https://www.amazon.com/) (Design, Info)
+- [Goodreads](https://www.goodreads.com/) (Info, Design)
+- [MDN](https://developer.mozilla.org/) (Info, resources)
+- [Google](https://www.google.com/) (Info, resources)
+- [Stack Overflow](https://stackoverflow.com/) (Info, resources)
+- [Github](https://github.com) (code hosting, resources)
+- AI (Info, resources, copilot)
 
 This project is released under the [UNLICENSE License](UNLICENSE). Please see the `UNLICENSE` file for more information. If the license is not suitable for your use case, you can use the resources used in this project according to the license of the respective resource. The logo(s) of the project is also released under the same license.
 
