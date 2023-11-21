@@ -1,4 +1,4 @@
-import { Card } from "@material-tailwind/react";
+import { Button, Card } from "@material-tailwind/react";
 import DynamicMeta from "../DynamicMeta";
 import Header from "../Header";
 import DisplayCartItems from "./DisplayCartItems";
@@ -13,36 +13,39 @@ function MemberDashboard() {
 	const namePhotoSeed = `https://picsum.photos/seed/${"user"}/200`;
 	const [userImage, setUserImage] = useState(namePhotoSeed);
 	const [userUid, setUserUid] = useState(null);
-	const [userDisplayName, setUserDisplayName] = "user";
+	const [userDisplayName, setUserDisplayName] = useState("User");
 
 	const userIdRef = collection(db, "users");
 
-	// Get the user image from the database
 	useEffect(() => {
 		const fetchUserId = async () => {
 			try {
-				const userId = await getUserId();
-				setUserUid(userId);
+				const id = await getUserId();
+				setUserUid(id);
 			} catch (error) {
-				console.error(error);
+				console.error("Error:", error.message);
 			}
 		};
 
+		fetchUserId();
+	}, []);
+	useEffect(() => {
 		const fetchImage = async () => {
 			const q = query(userIdRef, where("userId", "==", userUid));
 			const querySnapshot = await getDocs(q);
+			if (querySnapshot.empty) {
+				console.error("No matching documents.");
+			}
 
-			querySnapshot.forEach(data => {
+			querySnapshot.forEach(doc => {
+				const data = doc.data();
 				setUserImage(data.photo);
 				setUserDisplayName(data.name);
 			});
 		};
 
 		fetchImage();
-		fetchUserId();
-	}, []);
-	console.log(userDisplayName);
-	console.log(userImage);
+	}, [userUid]);
 
 	return (
 		<>
@@ -72,6 +75,18 @@ function MemberDashboard() {
 				<h2 className="text-center font-bold">Your Cart</h2>
 				<DisplayCartItems />
 			</Card>
+			<div style={{ display: "flex", justifyContent: "center" }}>
+				<a href="/history">
+					<Button
+						style={{ width: "auto" }}
+						color="orange"
+						ripple
+						className="mt-5"
+					>
+						Show History
+					</Button>
+				</a>
+			</div>
 		</>
 	);
 }

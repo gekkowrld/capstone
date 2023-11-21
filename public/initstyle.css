@@ -1,3 +1,5 @@
+@import url("https://fonts.googleapis.com/css2?family=Fredoka&family=Nunito&family=Ubuntu&display=swap");
+
 .noscript-container {
 	height: 300px;
 	width: 550px;
@@ -20,4 +22,35 @@
 #noscript-sub-text {
 	font-size: 14px;
 	font-weight: 700;
+}
+
+/* Instead of editing the tailwind css, this file is edited to apply the changes at
+ * the top level and initial setup of the project
+ */
+
+body {
+	font-family: "Nunito", sans-serif;
+}
+
+a {
+	font-family: "Ubuntu", sans-serif;
+}
+a:link,
+a:visited {
+	color: #87ceeb;
+}
+a:hover,
+a:target,
+a:focus-visible,
+a:focus-within {
+	color: rgb(255, 183, 77);
+}
+
+.books_title,
+h1,
+h2,
+h3,
+h4,
+h5 {
+	font-family: "Fredoka", sans-serif;
 }

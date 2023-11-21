@@ -1,3 +1,13 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@layer base {
+	:root {
+		--color-netral-50: theme("colors.gray.50");
+	}
+}
+
+.theme-light {
+	@apply bg-white text-black;
+}

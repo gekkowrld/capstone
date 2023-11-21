@@ -35,7 +35,7 @@ const Providers = () => {
 
 					<button
 						onClick={signInWithGithub}
-						className="bg-blue-400 hover:bg-blue-500 text-white font-semibold py-2 px-4 rounded-full w-full duration-500 ease-in-out"
+						className="bg-gray-900 hover:bg-gray-800 text-white font-semibold py-2 px-4 rounded-full w-full duration-500 ease-in-out"
 					>
 						Login with Github
 					</button>
