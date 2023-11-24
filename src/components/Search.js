@@ -10,34 +10,34 @@ import { Link } from "react-router-dom";
  *  properties are to be reserved ).
  * But the functionality is there.
  *
- * The products are first fetched from the database.
+ * The books are first fetched from the database.
  * After fetching (probably every time the user presses the search bar (or slash)),
- * 	this is to "ensure" that the products are up to date.
+ * 	this is to "ensure" that the books are up to date.
  *
  * This is to ensure that less api calls are made while keeping everything up to date.
- * 		(If the products are not fetched every time the user presses the search bar,
- * 			then the products will not be up to date.)
+ * 		(If the books are not fetched every time the user presses the search bar,
+ * 			then the books will not be up to date.)
  *
- * The products are then filtered by the search term.
- * 		(If the search term is empty, then no product is displayed.)
+ * The books are then filtered by the search term.
+ * 		(If the search term is empty, then no book is displayed.)
  *
  * This style is not recommended for production (or large dataset).
  * This is because the search is done on the client side.
- * This means that the client will have to download all the products (the name and id) of the products collection.
+ * This means that the client will have to download all the books (the name and id) of the books collection.
  * This is not efficient.
  *
- * If you have a large dataset, then you should use Algolia (or other products).
+ * If you have a large dataset, then you should use Algolia (or other books).
  * 	There are many tutorials on how to use Algolia with Firebase.
  *
- * Or if you hate non open source products, then you can use ElasticSearch (not fully open source).
+ * Or if you hate non open source books, then you can use ElasticSearch (not fully open source).
  *
- * @returns A stylized search bar that allows the user to search for products by
+ * @returns A stylized search bar that allows the user to search for books by
  *     name.
  */
 
 function Search() {
 	const [searchTerm, setSearchTerm] = useState("");
-	const [productsData, setProductsData] = useState([]);
+	const [booksData, setProductsData] = useState([]);
 	const [showResults, setShowResults] = useState(false);
 	const [showModal, setShowModal] = useState(false);
 
@@ -51,13 +51,13 @@ function Search() {
 
 	useEffect(() => {
 		const db = getFirestore();
-		const productsRef = collection(db, "products");
+		const booksRef = collection(db, "books");
 
-		const unsubscribe = onSnapshot(productsRef, snapshot => {
+		const unsubscribe = onSnapshot(booksRef, snapshot => {
 			const data = [];
 			snapshot.forEach(doc => {
-				const { name, id } = { ...doc.data(), id: doc.id };
-				data.push({ name, id });
+				const { title, id } = { ...doc.data(), id: doc.id };
+				data.push({ title, id });
 			});
 			setProductsData(data);
 		});
@@ -70,20 +70,18 @@ function Search() {
 		setShowResults(true);
 	};
 
-	const filteredProducts = productsData.filter(product => {
+	const filteredProducts = booksData.filter(book => {
 		let searchTermLower = searchTerm.toLowerCase();
-		let productNameLower = product.name.toLowerCase();
+		let bookNameLower = book.title.toLowerCase();
 
-		const productWords = productNameLower.split(" ");
-		if (productNameLower.startsWith(searchTermLower)) {
+		const bookWords = bookNameLower.split(" ");
+		if (bookNameLower.startsWith(searchTermLower)) {
 			return true;
-		} else if (productWords.includes(searchTermLower)) {
+		} else if (bookWords.includes(searchTermLower)) {
 			return true;
-		} else if (
-			productWords.some(word => word.startsWith(searchTermLower))
-		) {
+		} else if (bookWords.some(word => word.startsWith(searchTermLower))) {
 			return true;
-		} else if (productNameLower.includes(searchTermLower)) {
+		} else if (bookNameLower.includes(searchTermLower)) {
 			return true;
 		} else return false;
 	});
@@ -101,14 +99,14 @@ function Search() {
 			<div className="w-full flex items-center flex-col justify-center overflow-auto">
 				{showResults && (
 					<ul className="flex items-center flex-col w-full overflow-y-auto">
-						{filteredProducts.map(product => (
+						{filteredProducts.map(book => (
 							<Link
 								className="w-4/5 h-14 z-40 bg-deep-orange-900 p-14 rounded-md flex items-center justify-center flex-col hover:text-orange-700 hover:bg-blue-gray-500"
-								to={"/product/" + product.id}
-								key={product.id}
+								to={"/book/" + book.id}
+								key={book.id}
 							>
 								<li>
-									<p>{product.name}</p>
+									<p>{book.title}</p>
 								</li>
 							</Link>
 						))}
@@ -146,7 +144,7 @@ function Search() {
 		<div>
 			{handleSlash()}
 			<button
-				aria-description="Search for products"
+				aria-description="Search for books"
 				aria-label="search"
 				onClick={handleButtonClick}
 				className="fixed z-40 h-14 w-14 bottom-11 bg-deep-orange-800 right-11 rounded-lg text-white flex items-center justify-center border border-black"

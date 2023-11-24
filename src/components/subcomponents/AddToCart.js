@@ -21,7 +21,7 @@ import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import db, { getUserId } from "../../sdk/firebase";
 import { Button } from "@mui/material";
-import { collection, doc, setDoc } from "firebase/firestore";
+import { collection, doc, serverTimestamp, setDoc } from "firebase/firestore";
 
 const AddToCart = () => {
 	const [productCount, setProductCount] = useState(1);
@@ -58,11 +58,16 @@ const AddToCart = () => {
 
 	const saveData = async () => {
 		let cartRef = doc(db, "cartItems", userId);
-		let cVal = collection(cartRef, uid);
+		let cVal = collection(cartRef, "cart");
 		let dVal = doc(cVal, uid);
 		await setDoc(
 			dVal,
-			{ quantity: productCount, userId, productId: uid },
+			{
+				quantity: productCount,
+				userId,
+				bookId: uid,
+				addTime: serverTimestamp()
+			},
 			{ merge: true }
 		);
 	};
@@ -97,13 +102,18 @@ const AddToCart = () => {
 
 	const showProductAddToCartBtn = () => {
 		return (
-			<button
-				onClick={toggleModal}
-				className="flex w-full h-14 items-center bg-orange-500 hover:bg-orange-800 transition-all rounded-md p-7 my-4"
-			>
-				<AddShoppingCartSharp />
-				<span className="flex w-full justify-center">Add to Cart</span>
-			</button>
+			<div style={{ display: "flex" }}>
+				<button
+					style={{
+						width: "auto"
+					}}
+					onClick={toggleModal}
+					className="flex gap-5 h-14 items-center bg-orange-500 hover:bg-orange-800 transition-all rounded-md p-7 my-4"
+				>
+					<AddShoppingCartSharp />
+					<span className="flex justify-center">Add to Cart</span>
+				</button>
+			</div>
 		);
 	};
 

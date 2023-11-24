@@ -4,8 +4,7 @@ import {
 	IconButton,
 	Button
 } from "@material-tailwind/react";
-import { ShoppingBagIcon } from "@heroicons/react/24/solid";
-import { Dashboard } from "@mui/icons-material";
+import { BookOutlined, Dashboard } from "@mui/icons-material";
 import {
 	UserCircleIcon,
 	PowerIcon,
@@ -81,12 +80,18 @@ export default function Header() {
 				<div className="ml-auto flex gap-1 md:mr-4">
 					<Typography as="a" href="/dashboard">
 						<IconButton variant="text" color="blue-gray">
-							<Dashboard className="h-4 w-4" />
+							<Dashboard
+								titleAccess="Dashboard"
+								className="h-4 w-4"
+							/>
 						</IconButton>
 					</Typography>
 					<Typography as="a" href="/books">
 						<IconButton variant="text" color="blue-gray">
-							<ShoppingBagIcon className="h-4 w-4" />
+							<BookOutlined
+								titleAccess="Books"
+								className="h-4 w-4"
+							/>
 						</IconButton>
 					</Typography>
 				</div>
