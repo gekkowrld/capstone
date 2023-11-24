@@ -12,7 +12,7 @@ import RenderProductDescription from "./components/subcomponents/productPage";
 import LoginUser from "./auth/login";
 import AddAReview from "./components/subcomponents/reviewAdd";
 import NetworkMeter from "./components/subcomponents/networkStatus";
-import OrderHistory from "./components/subcomponents/orderHistory";
+import ShowOrderHistory from "./components/subcomponents/directHistory";
 
 function App() {
 	return (
@@ -24,7 +24,7 @@ function App() {
 				<Route path="/dashboard" element={<Dashboard />} />
 				<Route path="/login" element={<LoginUser />} />
 				<Route path="/logout" element={<LogoutPath />} />
-				<Route path="/history" element={<OrderHistory />} />
+				<Route path="/history" element={<ShowOrderHistory />} />
 				<Route
 					path="book/:uid"
 					element={<RenderProductDescription />}
