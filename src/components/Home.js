@@ -15,16 +15,11 @@ import { Card } from "@mui/material";
 import { oneLineLoading } from "../components/Loading";
 import { masterHeaderBG } from "../assets/img";
 
-function getRandomNumber() {
-	return Math.floor(Math.random() * 600);
-}
-
 const booksRef = collection(db, "books");
 const storage = getStorage();
 
 function Home() {
 	const [books, setBooks] = useState([]);
-	const [randomNumber, setRandomNumber] = useState(0);
 	const [isLoading, setIsLoading] = useState(true);
 	const [greetingIndex, setGreetingIndex] = useState(0);
 	let greetingText = [
@@ -50,16 +45,13 @@ function Home() {
 		"wholesome"
 	];
 
+	const randomNumber = Math.floor(Math.random() * 600) + 1;
 	useEffect(() => {
 		const interval = setInterval(() => {
 			setGreetingIndex(Math.floor(Math.random() * greetingText.length));
 		}, 2300);
 		return () => clearInterval(interval);
 	}, [greetingIndex, greetingText]);
-
-	useEffect(() => {
-		setRandomNumber(getRandomNumber());
-	}, []);
 
 	const q = query(
 		booksRef,
@@ -84,8 +76,6 @@ function Home() {
 		};
 		fetchBooks();
 	}, []);
-
-	console.log(books);
 
 	if (isLoading) {
 		return (
