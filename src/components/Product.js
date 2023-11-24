@@ -12,7 +12,7 @@ import RenderProductDescription from "./subcomponents/productPage";
 
 export default function Products() {
 	const [books, setProducts] = useState([]);
-	const [loading, setLoading] = useState(false);
+	const [loading, setLoading] = useState(true);
 
 	useEffect(() => {
 		const fetchImage = async book => {
@@ -39,11 +39,7 @@ export default function Products() {
 						imageUrl: imageUrls[index]
 					}));
 					setProducts(booksWithImages);
-					setLoading(true);
-					localStorage.setItem(
-						"books",
-						JSON.stringify(booksWithImages)
-					);
+					setLoading(false);
 				})
 				.catch(error => {
 					console.error(error);
@@ -53,7 +49,7 @@ export default function Products() {
 		return unsubscribe;
 	}, []);
 
-	if (!loading) {
+	if (loading) {
 		return <LoadingScreen />;
 	}
 
@@ -79,13 +75,13 @@ export default function Products() {
 							key={book.uid}
 						>
 							<img
-								src={localStorage.getItem(`image_${book.uid}`)}
-								alt={book.name}
+								src={book.imageUrl}
+								alt={book.title}
 								className="h-32"
 							/>
 							<a
 								href={"/book/" + book.uid}
-								className="hover:text-orange-300"
+								className="hover:text-orange-300 books_title"
 								style={{
 									display: "-webkit-box",
 									WebkitBoxOrient: "vertical",

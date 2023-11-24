@@ -13,6 +13,7 @@ This is an E-Commerce Website hosted on Firebase. The assets for the project are
 This capstone project aims to design and implement a fully functional e-commerce application using multimedia systems concepts and Firebase Firestore for backend storage and hosting. The project will also integrate social media authentication features, allowing users to log in using their Twitter, Facebook, or Google accounts.
 
 > I couldn't implement "Facebook" authentication as I couldn't meet all the requirements to get my app authenticated or get the required authentication. I have implemented "Google" and "Twitter" authentication.
+> I have implemented "Github" instead of "Facebook" authentication. Now, you can login using "Google", "Twitter" and "Github" accounts.
 
 ### Features to Implement
 
@@ -91,6 +92,18 @@ For the image field I have added a placeholder image.
 The placeholder image is not actually uploaded to the database.
 This is to provide flexibility on what image is to be displayed if the image is not available.
 You can use the picsum api to generate a random image.
+
+## Payment solution
+
+I couldn't implement a payment solution as I don't have a credit card.
+> Books for free, yay!
+
+All the payment solutions I found required a credit card or a backend server.
+Paypal can be a solution but it requires registration of a business account.
+
+M-pesa was also on the list but again backend server is required.
+As explained [here by instasend](https://developers.intasend.com/docs/payment-button) it can be done but it involves trusting a third party with a third party payment solution.
+This is both a security risk and a privacy risk.
 
 ## Disclaimer
 

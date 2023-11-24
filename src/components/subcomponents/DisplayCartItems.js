@@ -1,172 +1,194 @@
 import {
-	getDoc,
-	doc,
-	serverTimestamp,
+	addDoc,
 	collection,
-	addDoc
+	deleteDoc,
+	doc,
+	getDoc,
+	onSnapshot,
+	serverTimestamp
 } from "firebase/firestore";
 import db, { getUserId } from "../../sdk/firebase";
 import { useEffect, useState } from "react";
+import { getStorage, ref, getDownloadURL } from "firebase/storage";
 import { oneLineLoading } from "../Loading";
 import { Button } from "@material-tailwind/react";
 
-function DisplayCartItems() {
-	let localStoragePrefix = "capstone_g_product-";
-	const [products, setProducts] = useState([]);
-	const [productIdArr, setProductIdArr] = useState([]);
-	const [productQuantity, setProductQuantity] = useState([]);
-	const [productPrice, setProductPrice] = useState([]);
-	const [userId, setUserId] = useState(null);
-	const [totalPrice, setTotalPrice] = useState(0);
-	const [itemsInCart, setItemsInCart] = useState(0);
+const DisplayCartItems = () => {
+	const [cartItems, setCartItems] = useState([]);
+	const [userId, setUserId] = useState("");
+	const [books, setBooks] = useState([]);
+	const [isLoading, setIsLoading] = useState(true);
 
 	useEffect(() => {
-		async function fetchProducts() {
-			const productsData =
-				await getProductsFromLocalStorage(localStoragePrefix);
-			setProducts(productsData);
-		}
 		const fetchUserId = async () => {
 			try {
-				const userId = await getUserId();
-				setUserId(userId);
+				const id = await getUserId();
+				setUserId(id);
 			} catch (error) {
 				console.error("Error:", error.message);
 			}
 		};
 
-		async function getProductsFromLocalStorage(prefix) {
-			const products = [];
-			for (let i = 0; i < localStorage.length; i++) {
-				const key = localStorage.key(i);
-				if (key.startsWith(prefix)) {
-					const product = JSON.parse(localStorage.getItem(key));
-					products.push({ key, value: product.value });
-				}
-			}
-			const productsWithInfo = await getProductsFromFirebase(products);
-			return productsWithInfo;
-		}
-
-		async function getProductsFromFirebase(products) {
-			const productIds = products.map(product =>
-				product.key.replace(localStoragePrefix, "")
-			);
-			setProductIdArr(productIds);
-			const productRefs = productIds.map(productId =>
-				doc(db, "products", productId)
-			);
-			const productDocs = await Promise.all(productRefs.map(getDoc));
-			const productInfoMap = new Map();
-			productDocs.forEach(doc => {
-				productInfoMap.set(doc.id, doc.data());
-			});
-			return products.map(product => {
-				const productId = product.key.replace(localStoragePrefix, "");
-				const productInfo = productInfoMap.get(productId);
-				return { ...product, productInfo };
-			});
-		}
-
-		function getTotalQuantity() {
-			let totalQuantity = 0;
-			let productQuantityV = [];
-			let productPriceV = [];
-			products.forEach(product => {
-				const value = localStorage.getItem(product.key);
-				if (value !== null) {
-					productQuantityV.push(parseInt(value));
-					productPriceV.push(product.productInfo.price);
-					totalQuantity +=
-						product.productInfo.price * parseInt(value);
-				}
-			});
-			setProductPrice(productPriceV);
-			setProductQuantity(productQuantityV);
-			setTotalPrice(totalQuantity.toFixed(2));
-		}
-
-		function getItemsInCart() {
-			let itemsInCart = 0;
-			products.forEach(product => {
-				const value = localStorage.getItem(product.key);
-				if (value !== null) {
-					itemsInCart += parseInt(value);
-				}
-			});
-			setItemsInCart(itemsInCart);
-		}
-		getItemsInCart();
 		fetchUserId();
-		fetchProducts();
-		getTotalQuantity();
 	}, []);
 
-	const checkOutCart = async () => {
+	useEffect(() => {
+		if (userId) {
+			const q = collection(db, `/cartItems/${userId}/cart`);
+
+			const unsubscribe = onSnapshot(q, snapshot => {
+				const data = [];
+				snapshot.forEach(doc => {
+					data.push(doc.data());
+				});
+				setCartItems(data);
+			});
+
+			return () => unsubscribe();
+		}
+	}, [userId]);
+
+	useEffect(() => {
+		const fetchBooks = async () => {
+			const booksArray = [];
+			const storage = getStorage();
+
+			for (let item of cartItems) {
+				const docRef = doc(db, "books", item.bookId);
+				const docSnap = await getDoc(docRef);
+
+				if (docSnap.exists()) {
+					const bookData = docSnap.data();
+					const imageRef = ref(storage, bookData.img_url);
+					bookData.img_url = await getDownloadURL(imageRef);
+					booksArray.push(bookData);
+				} else {
+					console.log("No such document!");
+				}
+			}
+			setBooks(booksArray);
+			setIsLoading(false);
+		};
+
+		fetchBooks();
+	}, [cartItems]);
+
+	if (isLoading === true) {
+		return oneLineLoading();
+	}
+
+	if (books.length === 0) {
+		return (
+			<div>
+				<p className="text-center text-2xl font-bold text-gray-500">
+					Oh no, your cart is empty! Discover your{" "}
+					<a
+						className="hover:text-orange-300 text-orange-100 underline"
+						href="/books"
+					>
+						next favorite book
+					</a>{" "}
+					now!
+				</p>
+			</div>
+		);
+	}
+
+	const formatPrice = price => {
+		return new Intl.NumberFormat("en-KE", {
+			style: "currency",
+			currency: "KES"
+		}).format(price);
+	};
+
+	const handleCheckout = async () => {
+		setIsLoading(true);
 		let orderDoc = doc(db, "orders", userId);
 		let cVal = collection(orderDoc, "cart");
-		await addDoc(cVal, {
-			userId: userId,
-			productId: productIdArr,
-			productQuantity: productQuantity,
-			productPrice: productPrice,
-			totalPrice: totalPrice,
-			productNo: itemsInCart,
-			checkedOutAt: serverTimestamp()
-		});
+		const cartItemsCopy = [...cartItems];
+		const bookIdArr = cartItems.map(item => item.bookId);
+		const bookQuantity = cartItems.map(item => item.quantity);
+		const bookPrice = books.map(book => book.price);
+		const totalPrice = books.reduce(
+			(total, book, index) =>
+				total + book.price * cartItemsCopy[index].quantity,
+			0
+		);
+		const itemsInCart = cartItems.length;
+
+		try {
+			await addDoc(cVal, {
+				userId: userId,
+				bookId: bookIdArr,
+				bookQuantity: bookQuantity,
+				bookPrice: bookPrice,
+				totalPrice: totalPrice,
+				bookNo: itemsInCart,
+				checkedOutAt: serverTimestamp()
+			});
+			cartItems.forEach(async item => {
+				/* I'm assuming that the userId will be filled by the time the user clicks on the checkout button */
+				const docRef = doc(
+					db,
+					`/cartItems/${userId}/cart`,
+					item.bookId
+				);
+				await deleteDoc(docRef);
+				setIsLoading(false);
+			});
+		} catch (error) {
+			console.error("Error adding document: ", error);
+			setIsLoading(false);
+		}
 	};
 
 	return (
 		<>
-			{products.length === 0 ? (
-				oneLineLoading()
-			) : (
-				<div className="flex flex-col gap-4">
-					{products.map(product => {
-						return (
-							<>
-								<div key={product.key}>
-									<p>{product.value}</p>
-									{(product.productInfo && (
-										<div>
-											<a
-												href={`/product/${product.key.replace(
-													localStoragePrefix,
-													""
-												)}`}
-												className="font-bold"
-											>
-												{product.productInfo.name}
-											</a>
-											<p>
-												KES{" "}
-												{product.productInfo.price.toFixed(
-													2
-												)}
-											</p>
-										</div>
-									)) ||
-										oneLineLoading()}
-								</div>
-							</>
-						);
-					})}
+			<div>
+				{books &&
+					cartItems &&
+					books.map((book, index) => (
+						<div
+							key={index}
+							className="flex items-center gap-2 p-2 border-b border-gray-300"
+						>
+							<img
+								style={{ width: "40px" }}
+								src={book.img_url}
+								alt={book.title}
+							/>
+							<p className="text-sm font-bold text-gray-500 border-r border-gray-300 pr-2">
+								{cartItems[index].quantity}
+							</p>
+							<p className="text-sm font-bold text-gray-500 border-r border-gray-300 pr-2">
+								{formatPrice(
+									book.price * cartItems[index].quantity
+								)}
+							</p>
+							<a
+								className="text-sm font-bold text-gray-500 hover:text-orange-300 hover:underline"
+								href={`/book/${cartItems[index].bookId}`}
+							>
+								{book.title}
+							</a>
+						</div>
+					))}
+			</div>
+			{books && (
+				<div style={{ display: "flex", justifyContent: "center" }}>
+					<Button
+						style={{ width: "auto" }}
+						color="orange"
+						ripple
+						className="mt-5"
+						onClick={handleCheckout}
+					>
+						Checkout
+					</Button>
 				</div>
 			)}
-			<p>
-				Total Price: ({itemsInCart} items) KES {totalPrice}
-			</p>
-			<Button
-				onClick={() => checkOutCart()}
-				color="blue-gray"
-				buttonType="filled"
-				size="regular"
-				ripple
-			>
-				Checkout
-			</Button>
 		</>
 	);
-}
+};
 
 export default DisplayCartItems;
