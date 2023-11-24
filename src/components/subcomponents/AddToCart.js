@@ -102,13 +102,18 @@ const AddToCart = () => {
 
 	const showProductAddToCartBtn = () => {
 		return (
-			<button
-				onClick={toggleModal}
-				className="flex w-full h-14 items-center bg-orange-500 hover:bg-orange-800 transition-all rounded-md p-7 my-4"
-			>
-				<AddShoppingCartSharp />
-				<span className="flex w-full justify-center">Add to Cart</span>
-			</button>
+			<div style={{ display: "flex" }}>
+				<button
+					style={{
+						width: "auto"
+					}}
+					onClick={toggleModal}
+					className="flex gap-5 h-14 items-center bg-orange-500 hover:bg-orange-800 transition-all rounded-md p-7 my-4"
+				>
+					<AddShoppingCartSharp />
+					<span className="flex justify-center">Add to Cart</span>
+				</button>
+			</div>
 		);
 	};
 
