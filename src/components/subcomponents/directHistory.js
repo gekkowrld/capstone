@@ -1,19 +1,16 @@
 import { useEffect, useState } from "react";
-import DynamicMeta from "../../components/DynamicMeta";
+import DynamicMeta from "../DynamicMeta";
 import { auth } from "../../sdk/firebase";
 import Providers from "../../auth/Providers";
 import OrderHistory from "./orderHistory";
 
 /**
- * This function checks if the user is logged in or not.
- * If the user is logged in, then it redirects them to the Home Page.
- * 	else it redirects them to the Login Page.
+ * Do not redirect to login (the url) if not logged in
  *
- * This is to prevent the user from accessing the Login Page when they are logged in.
+ * This is to ensure that if the user logs in successfully, they will be redirected to the dashboard
+ * 	instead of the login page
  *
- * This is the same mechanism implemented by github.com (not really, but it's similar)
- *
- * @returns The Login Page if the user is not logged in, otherwise it returns the Home Page
+ * In every way this is a hack, but it works and it's not too bad either
  */
 
 const ShowOrderHistory = () => {
@@ -23,18 +20,19 @@ const ShowOrderHistory = () => {
 		const unsubscribe = auth.onAuthStateChanged(user => {
 			if (user) {
 				setIsLoggedIn(true);
-				window.location.href = "/";
 			} else {
 				setIsLoggedIn(false);
 			}
 		});
 
-		return unsubscribe;
+		return () => {
+			unsubscribe();
+		};
 	}, []);
 
 	return (
 		<>
-			<DynamicMeta title="User order History" />
+			<DynamicMeta title="History" />
 			{isLoggedIn ? <OrderHistory /> : <Providers />}
 		</>
 	);

@@ -12,6 +12,7 @@ import {
 import db from "../../sdk/firebase";
 import { Card } from "@mui/material";
 import { getDownloadURL, getStorage, ref } from "firebase/storage";
+import Header from "../Header";
 
 const OrderHistory = () => {
 	const [userUid, setUserUid] = useState(null);
@@ -113,9 +114,10 @@ const OrderHistory = () => {
 	return (
 		<>
 			<DynamicMeta
-				title={"History | " + { userDisplayName }}
-				description={{ userDisplayName } + "'s dashboard"}
+				title={"History | " + userDisplayName}
+				description={userDisplayName + "'s dashboard"}
 			/>
+			<Header />
 			<Card
 				className="p-3 w-full mb-5"
 				style={{ backgroundColor: "#f5f5f5" }}

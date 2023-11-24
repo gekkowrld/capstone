@@ -33,6 +33,7 @@ const Providers = () => {
 							style={{
 								width: "20px"
 							}}
+							alt="Google Logo"
 							src="https://raw.githubusercontent.com/firebase/firebaseui-web/master/image/google.svg"
 						/>
 						Login with Google
@@ -43,6 +44,7 @@ const Providers = () => {
 						className="bg-blue-400 hover:bg-blue-500 text-white font-semibold py-2 px-4 rounded-sm w-full duration-500 ease-in-out mb-4 flex justify-center gap-4"
 					>
 						<img
+							alt="Twitter Logo"
 							style={{
 								width: "20px"
 							}}
@@ -56,6 +58,7 @@ const Providers = () => {
 						className="bg-gray-900 hover:bg-gray-800 text-white font-semibold py-2 px-4 rounded-sm w-full duration-500 ease-in-out flex justify-center gap-4"
 					>
 						<img
+							alt="Github Logo"
 							style={{
 								width: "20px"
 							}}
