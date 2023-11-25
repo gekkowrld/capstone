@@ -40,7 +40,7 @@ deploy: build
 # It will expire in 2 days.
 .PHONY: preview
 preview: build
-	firebase hosting:channel:deploy $(seed) --expires 1d
+	firebase hosting:channel:deploy $(seed) --expires 2d
 
 # Format the code
 

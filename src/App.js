@@ -29,7 +29,7 @@ function App() {
 					path="book/:uid"
 					element={<RenderProductDescription />}
 				/>
-				<Route path="/product/review/:uid" element={<AddAReview />} />
+				<Route path="/book/review/:uid" element={<AddAReview />} />
 				<Route path="*" element={<PageNotFound />} />
 			</Routes>{" "}
 			<Search />

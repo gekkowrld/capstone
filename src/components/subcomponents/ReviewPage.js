@@ -101,9 +101,17 @@ export default function ReviewDataShow({ bookId }) {
 						</div>
 					)}
 					<p>
-						Reviewed on:{" "}
-						{review.reviewTime.toDate().toLocaleDateString()} at{" "}
-						{review.reviewTime.toDate().toLocaleTimeString()}
+						{review.updateTime
+							? `Updated on:${new Date(
+									review.updateTime * 1000
+							  ).toLocaleDateString()} at ${new Date(
+									review.updateTime * 1000
+							  ).toLocaleTimeString()}`
+							: `Reviewed on: ${new Date(
+									review.reviewTime * 1000
+							  ).toLocaleDateString()} at ${new Date(
+									review.reviewTime * 1000
+							  ).toLocaleTimeString()}`}
 					</p>
 					<div className="flex items-center gap-2">
 						{Array.from({ length: 5 }, (_, index) => (
@@ -127,7 +135,9 @@ export default function ReviewDataShow({ bookId }) {
 						))}
 						<p className="font-bold">{review.review}</p>
 					</div>
-					<pre>{review.reviewBody}</pre>
+					<pre className="mt-2 text-sm font-sans text-gray-600">
+						{review.reviewBody}
+					</pre>
 				</div>
 			))}
 			<div className="mt-4">

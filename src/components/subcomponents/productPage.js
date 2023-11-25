@@ -4,7 +4,6 @@ import { getDownloadURL, getStorage, ref } from "firebase/storage";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 
-import { getUserId } from "../../sdk/firebase";
 import db from "../../sdk/firebase";
 import PageNotFound from "../404";
 import DynamicMeta from "../DynamicMeta";
@@ -18,7 +17,6 @@ const RenderProductDescription = () => {
 	const { uid } = useParams();
 	const [book, setProduct] = useState(null);
 	const [imageUrl, setImageUrl] = useState(null);
-	const [userUid, setUserUid] = useState(null);
 	const [loading, setLoading] = useState(true);
 
 	useEffect(() => {
@@ -37,16 +35,6 @@ const RenderProductDescription = () => {
 				console.error("No Image for this book");
 			}
 		};
-		const fetchUserId = async () => {
-			try {
-				const userId = await getUserId();
-				setUserUid(userId);
-			} catch (error) {
-				console.error(error);
-			}
-		};
-
-		fetchUserId();
 		fetchProduct().then(() => setLoading(false));
 	}, [uid]);
 
@@ -63,7 +51,6 @@ const RenderProductDescription = () => {
 			</div>
 		);
 	}
-	console.log(userUid);
 	return (
 		<div>
 			<Header />
@@ -190,34 +177,22 @@ const RenderProductDescription = () => {
 								</>
 							}
 							{
-								<>
-									<p className="text-black font-bold">
-										Dates:{" "}
-									</p>
-									{book.dates ? (
-										book.dates.map(date => {
+								book.dates && book.dates.length > 0 && (
+									<>
+										<p className="text-black font-bold">Dates:</p>
+										{book.dates.map(date => {
 											return <p key={uid}>{date}</p>;
-										})
-									) : (
-										<p>No dates exists!</p>
-									)}
-								</>
+										})}
+									</>
+								)
 							}
 							{
-								<>
-									{book.item.notes ? (
-										<p className="text-black font-bold">
-											Notes:
-										</p>
-									) : (
-										""
-									)}
-									{book.item.notes
-										? book.item.notes.map(note => {
-											return <p key={uid}>{note}</p>;
-										})
-										: ""}
-								</>
+								book.item.notes && (
+									<>
+										<p className="text-black font-bold">Notes:</p>
+										<p>{book.item.notes}</p>
+									</>
+								)
 							}
 							{
 								<>
@@ -240,19 +215,19 @@ const RenderProductDescription = () => {
 							{
 								<>
 									{
-										book.resources[0].pdf ? (
+										book.resources[0]?.pdf ? (
 											<p className="text-black font-bold">
 												PDF Version:
 											</p>
 										) : ("")
 									}
 									{
-										book.resources[0].pdf ? (
+										book.resources[0]?.pdf ? (
 											<a
 												className="hover:text-orange-300"
-												href={book.resources[0].pdf}
+												href={book.resources[0]?.pdf}
 											>
-												{book.resources[0].pdf}
+												{book.resources[0]?.pdf}
 											</a>
 										) : ("")
 									}
