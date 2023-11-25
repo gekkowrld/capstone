@@ -63,7 +63,7 @@ const DisplayCartItems = () => {
 					bookData.img_url = await getDownloadURL(imageRef);
 					booksArray.push(bookData);
 				} else {
-					console.log("No such document!");
+					console.error("No such document!");
 				}
 			}
 			setBooks(booksArray);

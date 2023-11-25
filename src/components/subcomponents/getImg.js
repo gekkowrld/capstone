@@ -7,7 +7,7 @@ const storage = getStorage();
 async function getImageUrl(imagePath) {
 	const imageRef = ref(storage, imagePath);
 	const imageUrl = await getDownloadURL(imageRef).catch(error => {
-		console.log(error);
+		console.error(error);
 	});
 	return imageUrl;
 }
